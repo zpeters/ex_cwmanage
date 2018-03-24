@@ -1,7 +1,5 @@
 # ExCwmanage
 
-**TODO: Add description**
-
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
@@ -19,3 +17,9 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
 
+## TODO
+
+- [ ] create "options" instead of static "conditions"
+- [ ] all of the http verbs
+- [ ] "helpers" or just the raw verb commands
+- [ ] update this file
