@@ -23,3 +23,4 @@ be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
 - [ ] all of the http verbs
 - [ ] "helpers" or just the raw verb commands
 - [ ] update this file
+- [ ] publish to hex
