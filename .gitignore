@@ -22,3 +22,7 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 ex_cwmanage-*.tar
 
+# Ignore environment configs as they may contain secrets
+config/dev.exs
+config/prod.exs
+config/test.exs
