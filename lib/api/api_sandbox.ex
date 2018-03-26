@@ -32,14 +32,15 @@ defmodule ExCwmanage.Api.Sandbox do
            "serverTimeZone" => "Eastern Standard Time",
            "version" => "v2018.2.53326"
          }}
-        "/service/locations" ->
+
+      "/service/locations" ->
         {:ok,
          [
            %{
              "_info" => %{
-           "lastUpdated" => "2010-08-02T11:58:04Z",
-           "updatedBy" => "abellini"
-         },
+               "lastUpdated" => "2010-08-02T11:58:04Z",
+               "updatedBy" => "abellini"
+             },
              "defaultFlag" => false,
              "id" => 1,
              "name" => "On-Site",
@@ -47,9 +48,9 @@ defmodule ExCwmanage.Api.Sandbox do
            },
            %{
              "_info" => %{
-           "lastUpdated" => "2010-08-02T11:58:00Z",
-           "updatedBy" => "abellini"
-         },
+               "lastUpdated" => "2010-08-02T11:58:00Z",
+               "updatedBy" => "abellini"
+             },
              "defaultFlag" => false,
              "id" => 2,
              "name" => "In-house",
@@ -57,15 +58,16 @@ defmodule ExCwmanage.Api.Sandbox do
            },
            %{
              "_info" => %{
-           "lastUpdated" => "2010-08-02T11:58:17Z",
-           "updatedBy" => "abellini"
-         },
+               "lastUpdated" => "2010-08-02T11:58:17Z",
+               "updatedBy" => "abellini"
+             },
              "defaultFlag" => true,
              "id" => 4,
              "name" => "Remote",
              "where" => "Remote"
            }
          ]}
+
       _ ->
         {:error, {:invalid, "<", 0}}
     end
@@ -76,16 +78,14 @@ defmodule ExCwmanage.Api.Sandbox do
      [
        %{
          "_info" => %{
-       "lastUpdated" => "2010-08-02T11:58:04Z",
-       "updatedBy" => "abellini"
-     },
+           "lastUpdated" => "2010-08-02T11:58:04Z",
+           "updatedBy" => "abellini"
+         },
          "defaultFlag" => false,
          "id" => 1,
          "name" => "On-Site",
          "where" => "OnSite"
-       },
+       }
      ]}
   end
-
 end
-

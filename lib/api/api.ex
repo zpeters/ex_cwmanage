@@ -8,7 +8,6 @@ defmodule ExCwmanage.Api do
   def get(path, conditions) do
     @connectwise_api.get(path, conditions)
   end
-
 end
 
 defmodule ExCwmanage.Api.HTTPClient do
@@ -17,11 +16,10 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, header} <- generate_header(token),
          {:ok, url} <- generate_url(path, []),
          {:ok, http} <- HTTPoison.get(url, header, []),
-         {:ok, resp} <- Poison.decode(http.body)
-      do
+         {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
-      else
-        err -> err
+    else
+      err -> err
     end
   end
 
@@ -30,11 +28,10 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, header} <- generate_header(token),
          {:ok, url} <- generate_url(path, "?conditions=#{conditions}"),
          {:ok, http} <- HTTPoison.get(url, header, []),
-         {:ok, resp} <- Poison.decode(http.body)
-      do
+         {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
-      else
-        err -> err
+    else
+      err -> err
     end
   end
 
@@ -47,9 +44,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   defp generate_header(token) do
-    headers = ["Authorization": "Basic #{token}",
-               "Accept": "application/vnd.connectwise.com+json; version=3.0.0",
-               "Content-Type": "application/json"]
+    headers = [
+      Authorization: "Basic #{token}",
+      Accept: "application/vnd.connectwise.com+json; version=3.0.0",
+      "Content-Type": "application/json"
+    ]
+
     {:ok, headers}
   end
 
