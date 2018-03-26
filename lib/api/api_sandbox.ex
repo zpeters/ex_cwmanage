@@ -1,4 +1,9 @@
 defmodule ExCwmanage.Api.Sandbox do
+  @moduledoc """
+  API Sandbox for testing and dev
+  """
+  @behaviour ExCwmanage.Api
+
   def get(path) do
     case path do
       "/system/info" ->
@@ -73,7 +78,7 @@ defmodule ExCwmanage.Api.Sandbox do
     end
   end
 
-  def get("/service/locations", "id=1") do
+  def get("/service/locations", [:id, 1]) do
     {:ok,
      [
        %{

@@ -1,20 +1,38 @@
 defmodule ExCwmanage.Api do
-  @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
+  @moduledoc """
+  This is the main API logic.  Currently we only support GET with the 'conditions' as an option.
+  Eventually this will encompass all of the HTTP verbs and the allowable ConnectWise 'parameters'
+  """
+  #@connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
+  @connectwise_api ExCwmanage.Api.HTTPClient
 
-  def get(path) do
-    @connectwise_api.get(path)
-  end
-
-  def get(path, conditions) do
-    @connectwise_api.get(path, conditions)
+  @callback get(path :: String.t(), opts :: list()) :: %{}
+  def get(path, opts \\ []) do
+    if opts do
+      @connectwise_api.get(path, opts)
+    else
+      @connectwise_api.get(path)
+    end
   end
 end
 
 defmodule ExCwmanage.Api.HTTPClient do
-  def get(path) do
+  @moduledoc """
+  HTTP Interaction with the ConnectWise api.
+
+  Handles generation of security token and and all http communication
+
+  Configurable settings:
+  cw_api_root - the root connectwise url
+  cw_companyid - the company id
+  cw_publickey - your public key
+  cw_privatekey - your private key
+  """
+  @behaviour ExCwmanage.Api
+  def get(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, header} <- generate_header(token),
-         {:ok, url} <- generate_url(path, []),
+         {:ok, url} <- generate_url(path, generate_parameters(opts)),
          {:ok, http} <- HTTPoison.get(url, header, []),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
@@ -23,19 +41,47 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get(path, conditions) do
-    with {:ok, token} <- generate_token(),
-         {:ok, header} <- generate_header(token),
-         {:ok, url} <- generate_url(path, "?conditions=#{conditions}"),
-         {:ok, http} <- HTTPoison.get(url, header, []),
-         {:ok, resp} <- Poison.decode(http.body) do
-      {:ok, resp}
-    else
-      err -> err
+  @doc """
+  This needs to be rewritten to use Keylists or maps
+  """
+  def generate_parameters(parameters) do
+    cond do
+      parameters == [] ->
+        nil
+      length(parameters) == 2 ->
+        {parameter, value} = process_parameter(parameters)
+        "?#{parameter}=#{value}"
+      true ->
+        parms = parameters
+        |> Enum.chunk_every(2)
+        |> Enum.map(&(process_parameter(&1)))
+        parameter_joiner(parms)
     end
   end
 
-  defp generate_token() do
+  @doc "TODO: NEEDS CLEANUP"
+  defp parameter_joiner(parameters) do
+    parms = parameters
+    |> Enum.map(&("#{elem(&1,0)}=#{elem(&1,1)}"))
+    parm_string = Enum.join(parms, "&")
+    "?#{parm_string}"
+  end
+
+  @doc  "TODO: NEEDS CLEANUP"
+  defp process_parameter(parameters) do
+    parameter = List.first(parameters)
+    value = List.last(parameters)
+    case parameter do
+      :conditions ->
+        {"conditions", value}
+      :page ->
+        {"page", value}
+      _unknown ->
+        {:error, :unknown_option}
+    end
+  end
+
+  defp generate_token do
     id = Application.get_env(:ex_cwmanage, :cw_companyid)
     pub = Application.get_env(:ex_cwmanage, :cw_publickey)
     priv = Application.get_env(:ex_cwmanage, :cw_privatekey)

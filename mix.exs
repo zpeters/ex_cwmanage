@@ -33,6 +33,7 @@ defmodule ExCwmanage.MixProject do
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
       {:excoveralls, "~> 0.8", only: :test},
+      {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
