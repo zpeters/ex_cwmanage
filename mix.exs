@@ -14,6 +14,10 @@ defmodule ExCwmanage.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test
       ],
+      docs: [
+        main: "ExCwmanage",
+        extras: ["README.md"]
+      ],
       deps: deps()
     ]
   end

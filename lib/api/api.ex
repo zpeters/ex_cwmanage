@@ -1,4 +1,17 @@
 defmodule ExCwmanage.Api do
+  @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
+
+  def get(path) do
+    @connectwise_api.get(path)
+  end
+
+  def get(path, conditions) do
+    @connectwise_api.get(path, conditions)
+  end
+
+end
+
+defmodule ExCwmanage.Api.HTTPClient do
   def get(path) do
     with {:ok, token} <- generate_token(),
          {:ok, header} <- generate_header(token),

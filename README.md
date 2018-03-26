@@ -20,11 +20,15 @@ be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
 ## TODO
 
 - [x] basic tests for get
-- [ ] tests "mock" out api calls instead of using live data
+- [x] tests "mock" out api calls instead of using live data
+http://blog.plataformatec.com.br/2015/10/mocks-and-explicit-contracts/
 - [ ] doc/doc tests
+https://hexdocs.pm/elixir/writing-documentation.html
+http://elixir-recipes.github.io/testing/doctests/
 - [ ] put
 - [ ] create "options" instead of static "conditions"
 - [ ] all of the http verbs
 - [ ] update this file
 - [ ] figure out how versioning is supposed ot work
 - [ ] publish to hex
+- [ ] create a few "expensive" tests that run against the live api
