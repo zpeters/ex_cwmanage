@@ -26,4 +26,5 @@ be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
 - [ ] create "options" instead of static "conditions"
 - [ ] all of the http verbs
 - [ ] update this file
+- [ ] figure out how versioning is supposed ot work
 - [ ] publish to hex
