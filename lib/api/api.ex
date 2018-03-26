@@ -1,7 +1,4 @@
 defmodule ExCwmanage.Api do
-  def put (something) do
-    IO.puts("PUtting #{something}")
-  end
   def get(path) do
     with {:ok, token} <- generate_token(),
          {:ok, header} <- generate_header(token),

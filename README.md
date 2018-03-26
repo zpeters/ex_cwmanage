@@ -19,9 +19,11 @@ be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
 
 ## TODO
 
+- [x] basic tests for get
+- [ ] tests "mock" out api calls instead of using live data
+- [ ] doc/doc tests
 - [ ] put
 - [ ] create "options" instead of static "conditions"
 - [ ] all of the http verbs
-- [ ] "helpers" or just the raw verb commands
 - [ ] update this file
 - [ ] publish to hex
