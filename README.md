@@ -1,6 +1,23 @@
 # ExCwmanage
+## TODO
+- [x] basic tests for get
+- [x] tests "mock" out api calls instead of using live data
+	http://blog.plataformatec.com.br/2015/10/mocks-and-explicit-contracts/
+- [ ] test "generate parameters"
+- [ ] create "options" instead of static "conditions"
+- [ ] make our snadbox api more robust
+- [ ] put
+- [ ] doc/doc tests
+	https://hexdocs.pm/elixir/writing-documentation.html
+	http://elixir-recipes.github.io/testing/doctests/
+- [ ] all of the http verbs
+- [ ] update this file
+- [ ] figure out how versioning is supposed ot work
+- [ ] create a few "expensive" tests that run against the live api
+- [ ] publish to hex
 
-## Installation
+
+## Installation - NOT PUBLISHED TO HEX YET
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `ex_cwmanage` to your list of dependencies in `mix.exs`:
@@ -16,21 +33,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/ex_cwmanage](https://hexdocs.pm/ex_cwmanage).
-
-## TODO
-
-- [x] basic tests for get
-- [x] tests "mock" out api calls instead of using live data
-http://blog.plataformatec.com.br/2015/10/mocks-and-explicit-contracts/
-- [ ] test "generate parameters"
-- [ ] create "options" instead of static "conditions"
-- [ ] make our snadbox api more robust
-- [ ] put
-- [ ] doc/doc tests
-https://hexdocs.pm/elixir/writing-documentation.html
-http://elixir-recipes.github.io/testing/doctests/
-- [ ] all of the http verbs
-- [ ] update this file
-- [ ] figure out how versioning is supposed ot work
-- [ ] publish to hex
-- [ ] create a few "expensive" tests that run against the live api
