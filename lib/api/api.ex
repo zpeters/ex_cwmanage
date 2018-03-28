@@ -3,7 +3,7 @@ defmodule ExCwmanage.Api do
   This is the main API logic.  Currently we only support GET with the 'conditions' as an option.
   Eventually this will encompass all of the HTTP verbs and the allowable ConnectWise 'parameters'
   """
-  #@connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
+  # @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
   @connectwise_api ExCwmanage.Api.HTTPClient
 
   @callback get(path :: String.t(), opts :: list()) :: %{}
@@ -48,34 +48,43 @@ defmodule ExCwmanage.Api.HTTPClient do
     cond do
       parameters == [] ->
         nil
+
       length(parameters) == 2 ->
         {parameter, value} = process_parameter(parameters)
         "?#{parameter}=#{value}"
+
       true ->
-        parms = parameters
-        |> Enum.chunk_every(2)
-        |> Enum.map(&(process_parameter(&1)))
+        parms =
+          parameters
+          |> Enum.chunk_every(2)
+          |> Enum.map(&process_parameter(&1))
+
         parameter_joiner(parms)
     end
   end
 
   @doc "TODO: NEEDS CLEANUP"
   defp parameter_joiner(parameters) do
-    parms = parameters
-    |> Enum.map(&("#{elem(&1,0)}=#{elem(&1,1)}"))
+    parms =
+      parameters
+      |> Enum.map(&"#{elem(&1, 0)}=#{elem(&1, 1)}")
+
     parm_string = Enum.join(parms, "&")
     "?#{parm_string}"
   end
 
-  @doc  "TODO: NEEDS CLEANUP"
+  @doc "TODO: NEEDS CLEANUP"
   defp process_parameter(parameters) do
     parameter = List.first(parameters)
     value = List.last(parameters)
+
     case parameter do
       :conditions ->
         {"conditions", value}
+
       :page ->
         {"page", value}
+
       _unknown ->
         {:error, :unknown_option}
     end
