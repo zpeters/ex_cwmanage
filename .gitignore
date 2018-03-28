@@ -23,4 +23,5 @@ erl_crash.dump
 ex_cwmanage-*.tar
 
 # Ignore secret files
-config/*secret*.exs
+config/dev.secret.exs
+config/test.secret.exs
