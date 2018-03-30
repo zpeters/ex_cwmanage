@@ -14,6 +14,11 @@ defmodule ExCwmanage.Api do
       @connectwise_api.get(path)
     end
   end
+
+  @callback post(path :: String.t(), payload :: String.t()) :: %{}
+  def post(path, payload) do
+    @connectwise_api.post(path, payload)
+  end
 end
 
 defmodule ExCwmanage.Api.HTTPClient do
@@ -29,11 +34,24 @@ defmodule ExCwmanage.Api.HTTPClient do
   cw_privatekey - your private key
   """
   @behaviour ExCwmanage.Api
+
   def get(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
-         {:ok, header} <- generate_header(token),
+         {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.get(url, header, []),
+         {:ok, http} <- HTTPoison.get(url, headers, []),
+         {:ok, resp} <- Poison.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> err
+    end
+  end
+
+  def post(path, payload) do
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(path),
+         {:ok, http} <- HTTPoison.post(url, payload, headers, []),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -44,7 +62,7 @@ defmodule ExCwmanage.Api.HTTPClient do
   @doc """
   This needs to be rewritten to use Keylists or maps
   """
-  def generate_parameters(parameters) do
+  defp generate_parameters(parameters) do
     cond do
       parameters == [] ->
         nil
@@ -98,7 +116,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, Base.encode64(token)}
   end
 
-  defp generate_header(token) do
+  defp generate_headers(token) do
     headers = [
       Authorization: "Basic #{token}",
       Accept: "application/vnd.connectwise.com+json; version=3.0.0",
@@ -106,6 +124,12 @@ defmodule ExCwmanage.Api.HTTPClient do
     ]
 
     {:ok, headers}
+  end
+
+  defp generate_url(path) do
+    root = Application.get_env(:ex_cwmanage, :cw_api_root)
+    url = "#{root}#{path}"
+    {:ok, url}
   end
 
   defp generate_url(path, conditions) do

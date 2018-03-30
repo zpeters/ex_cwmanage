@@ -93,4 +93,8 @@ defmodule ExCwmanage.Api.Sandbox do
        }
      ]}
   end
+
+  def post(_path, _payload) do
+    :ok
+  end
 end

@@ -6,7 +6,7 @@
 - [ ] test "generate parameters"
 - [ ] create "options" instead of static "conditions"
 - [ ] make our snadbox api more robust
-- [ ] put
+- [x] put
 - [ ] doc/doc tests
 	https://hexdocs.pm/elixir/writing-documentation.html
 	http://elixir-recipes.github.io/testing/doctests/
