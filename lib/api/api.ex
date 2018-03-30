@@ -36,10 +36,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   @behaviour ExCwmanage.Api
 
   def get(path, opts \\ []) do
+    to = Application.get_env(:ex_cwmanage, :http_timeout)
+    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.get(url, headers, []),
+         {:ok, http} <- HTTPoison.get(url, headers, [timeout: to, recv_timeout: rto]),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -48,10 +50,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def post(path, payload) do
+    to = Application.get_env(:ex_cwmanage, :http_timeout)
+    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(path),
-         {:ok, http} <- HTTPoison.post(url, payload, headers, []),
+         {:ok, http} <- HTTPoison.post(url, payload, headers, [timeout: to, recv_timeout: rto]),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
