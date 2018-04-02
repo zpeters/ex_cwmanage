@@ -4,7 +4,23 @@ defmodule ExCwmanage.Api.Sandbox do
   """
   @behaviour ExCwmanage.Api
 
-  def get(path) do
+  def get("/service/locations", [:conditions, "id=1"]) do
+    {:ok,
+     [
+       %{
+         "_info" => %{
+           "lastUpdated" => "2010-08-02T11:58:04Z",
+           "updatedBy" => "abellini"
+         },
+         "defaultFlag" => false,
+         "id" => 1,
+         "name" => "On-Site",
+         "where" => "OnSite"
+       }
+     ]}
+  end
+
+  def get(path, []) do
     case path do
       "/system/info" ->
         {:ok,
@@ -76,22 +92,6 @@ defmodule ExCwmanage.Api.Sandbox do
       _ ->
         {:error, {:invalid, "<", 0}}
     end
-  end
-
-  def get("/service/locations", [:id, 1]) do
-    {:ok,
-     [
-       %{
-         "_info" => %{
-           "lastUpdated" => "2010-08-02T11:58:04Z",
-           "updatedBy" => "abellini"
-         },
-         "defaultFlag" => false,
-         "id" => 1,
-         "name" => "On-Site",
-         "where" => "OnSite"
-       }
-     ]}
   end
 
   def post(_path, _payload) do
