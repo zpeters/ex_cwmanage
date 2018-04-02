@@ -1,5 +1,7 @@
 # ExCwmanage [![Build Status](https://travis-ci.org/zpeters/ex_cwmanage.svg?branch=master)](https://travis-ci.org/zpeters/ex_cwmanage) [![Deps Status](https://beta.hexfaktor.org/badge/all/github/zpeters/ex_cwmanage.svg)](https://beta.hexfaktor.org/github/zpeters/ex_cwmanage) 
 
+## ALPHA - WORK IN PROGRESS - DO NOT USE
+
 ## TODO
 - [x] basic tests for get
 - [x] tests "mock" out api calls instead of using live data
