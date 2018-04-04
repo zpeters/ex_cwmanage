@@ -9,7 +9,3 @@ else
     cw_publickey: System.get_env("CW_PUBLICKEY"),
     cw_privatekey: System.get_env("CW_PRIVATEKEY")
 end
-
-### APIs
-# Sandbox ConnectWise api
-config :ex_cwmanage, :connectwise_api, ExCwmanage.Api.Sandbox
