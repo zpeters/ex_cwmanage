@@ -1,4 +1,4 @@
-defmodule ExCwmanage.Api do
+defmodule ExCwmanage.Api.HTTPClient do
   @moduledoc """
   HTTP Interaction with the ConnectWise api.
 
