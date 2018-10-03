@@ -41,6 +41,51 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
+  def put(path, payload) do
+    to = Application.get_env(:ex_cwmanage, :http_timeout)
+    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
+
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(path),
+         {:ok, http} <- HTTPoison.put(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, resp} <- Poison.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> err
+    end
+  end
+
+  def patch(path, payload) do
+    to = Application.get_env(:ex_cwmanage, :http_timeout)
+    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
+
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(path),
+         {:ok, http} <- HTTPoison.patch(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, resp} <- Poison.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> err
+    end
+  end
+
+  def delete(path, payload) do
+    to = Application.get_env(:ex_cwmanage, :http_timeout)
+    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
+
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(path),
+         {:ok, http} <- HTTPoison.delete(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, resp} <- Poison.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> err
+    end
+  end
+
   defp generate_parameters(parameters) do
     cond do
       parameters == [] ->
