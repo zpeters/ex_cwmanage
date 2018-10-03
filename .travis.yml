@@ -3,8 +3,6 @@ elixir:
         - 1.7.1
 otp_release: 
         - 21.0
-script:
-        - "MIX_ENV=test mix do deps.get, compile, test, coveralls.travis"
-notifications:
-        recipients:
-                - zpeters@gmail.com
+env:
+        - MIX_ENV=test
+script: mix coveralls.travis 
