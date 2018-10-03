@@ -1,3 +1,12 @@
 language: elixir
-elixir: '1.6.4'
-otp_release: '20.0'
+elixir:
+        - 1.6.4
+        - 1.7.1
+otp_release: 
+        - 20.0
+        - 21.0
+script:
+        - "MIX_ENV=test mix do deps.get, compile, test, coveralls.travis"
+notifications:
+        recipients:
+                - zpeters@gmail.com
