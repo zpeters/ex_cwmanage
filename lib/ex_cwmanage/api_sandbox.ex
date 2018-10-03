@@ -97,4 +97,16 @@ defmodule ExCwmanage.Api.Sandbox do
   def post(_path, _payload) do
     :ok
   end
+
+  def put(_path, _payload) do
+    :ok
+  end
+
+  def delete(_path, _parameters) do
+    :ok
+  end
+
+  def patch(_path, _payload) do
+    :ok
+  end
 end
