@@ -22,4 +22,24 @@ defmodule ExCwmanageApiTest do
     assert length(resp2) > 0
     assert length(resp) > length(resp2)
   end
+
+  test "post function returns placeholder :ok" do
+    resp = Api.post("/", %{})
+    assert resp == :ok
+  end
+
+  test "patch function returns placeholder :ok" do
+    resp = Api.patch("/", %{})
+    assert resp == :ok
+  end
+
+  test "put function returns placeholder :ok" do
+    resp = Api.put("/", %{})
+    assert resp == :ok
+  end
+
+  test "delete function returns placeholder :ok" do
+    resp = Api.delete("/", [])
+    assert resp == :ok
+  end
 end
