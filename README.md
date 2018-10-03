@@ -1,4 +1,6 @@
-# ExCwmanage [![Build Status](https://travis-ci.org/zpeters/ex_cwmanage.svg?branch=master)](https://travis-ci.org/zpeters/ex_cwmanage)
+# ExCwmanage 
+[![Build Status](https://travis-ci.org/zpeters/ex_cwmanage.svg?branch=master)](https://travis-ci.org/zpeters/ex_cwmanage)
+[![Coverage Status](https://coveralls.io/repos/github/zpeters/ex_cwmanage/badge.svg)](https://coveralls.io/github/zpeters/ex_cwmanage)
 
 # ALPHA - WORK IN PROGRESS - DO NOT USE
 
