@@ -6,5 +6,5 @@ config :ex_cwmanage,
   cw_publickey: System.get_env("CW_PUBLICKEY"),
   cw_privatekey: System.get_env("CW_PRIVATEKEY")
 
-# live apis
+## Apis
 config :ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient

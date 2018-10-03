@@ -12,6 +12,5 @@ else
     cw_privatekey: System.get_env("CW_PRIVATEKEY")
 end
 
-### APIs
-# Live ConnectWise api
+## Apis
 config :ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient

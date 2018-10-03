@@ -4,6 +4,7 @@ defmodule ExCwmanage.MixProject do
   def project do
     [
       app: :ex_cwmanage,
+      name: "ExCwmanage",
       version: "0.1.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
@@ -18,7 +19,10 @@ defmodule ExCwmanage.MixProject do
         main: "ExCwmanage",
         extras: ["README.md"]
       ],
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      source_url: "https://github.com/zpeters/ex_cwmanage" # Used to link to code from ExDoc generated docs
     ]
   end
 
@@ -28,13 +32,25 @@ defmodule ExCwmanage.MixProject do
     ]
   end
 
+  defp description() do
+    "ConnectWise Manage library for Elixir."
+  end
+
+  defp package() do
+    [
+      licenses: ["GPL v3.0"],
+      links: %{"GitHub" => "https://github.com/zpeters/ex_cwmanage"}
+    ]
+  end
+
   defp deps do
     [
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
       {:excoveralls, "~> 0.8", only: :test},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:inch_ex, only: :docs}
     ]
   end
 end
