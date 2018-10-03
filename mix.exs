@@ -49,7 +49,8 @@ defmodule ExCwmanage.MixProject do
       {:poison, "~> 3.1"},
       {:excoveralls, "~> 0.8", only: :test},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:inch_ex, only: :docs}
     ]
   end
 end
