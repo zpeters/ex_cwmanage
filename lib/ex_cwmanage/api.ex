@@ -28,8 +28,8 @@ defmodule ExCwmanage.Api do
     @connectwise_api.patch(path, payload)
   end
 
-  @callback delete(path :: path, payload :: String.t()) :: map
-  def delete(path, payload) do
-    @connectwise_api.delete(path, payload)
+  @callback delete(path :: path, opts :: list()) :: map
+  def delete(path, opts \\ []) do
+    @connectwise_api.delete(path, opts)
   end
 end
