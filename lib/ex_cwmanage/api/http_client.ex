@@ -71,14 +71,14 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def delete(path, payload) do
+  def delete(path, opts \\ []) do
     to = Application.get_env(:ex_cwmanage, :http_timeout)
     rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path),
-         {:ok, http} <- HTTPoison.delete(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(path, generate_parameters(opts)),
+         {:ok, http} <- HTTPoison.delete(url, headers, timeout: to, recv_timeout: rto),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
