@@ -3,22 +3,17 @@ defmodule ExCwmanage.Api.HTTPClient do
   HTTP Interaction with the ConnectWise api.
 
   Handles generation of security token and and all http communication
-
-  Configurable settings:
-  cw_api_root - the root connectwise url
-  cw_companyid - the company id
-  cw_publickey - your public key
-  cw_privatekey - your private key
   """
 
-  def get(path, opts \\ []) do
-    to = Application.get_env(:ex_cwmanage, :http_timeout)
-    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
+  @api_root  Application.get_env(:ex_cwmanage, :cw_api_root)
+  @timeout  Application.get_env(:ex_cwmanage, :http_timeout)
+  @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
+  def get(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.get(url, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <- HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -27,13 +22,10 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def post(path, payload) do
-    to = Application.get_env(:ex_cwmanage, :http_timeout)
-    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
-
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path),
-         {:ok, http} <- HTTPoison.post(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <- HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -42,13 +34,10 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def put(path, payload) do
-    to = Application.get_env(:ex_cwmanage, :http_timeout)
-    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
-
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path),
-         {:ok, http} <- HTTPoison.put(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <- HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -57,13 +46,10 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def patch(path, payload) do
-    to = Application.get_env(:ex_cwmanage, :http_timeout)
-    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
-
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path),
-         {:ok, http} <- HTTPoison.patch(url, payload, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <- HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -72,18 +58,20 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def delete(path, opts \\ []) do
-    to = Application.get_env(:ex_cwmanage, :http_timeout)
-    rto = Application.get_env(:ex_cwmanage, :http_recv_timeout)
-
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.delete(url, headers, timeout: to, recv_timeout: rto),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <- HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
       err -> err
     end
+  end
+
+  defp generate_url(api_root, path, conditions \\ []) do
+    url = "#{api_root}#{path}#{conditions}"
+    {:ok, url}
   end
 
   defp generate_parameters(parameters) do
@@ -148,15 +136,4 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, headers}
   end
 
-  defp generate_url(path) do
-    root = Application.get_env(:ex_cwmanage, :cw_api_root)
-    url = "#{root}#{path}"
-    {:ok, url}
-  end
-
-  defp generate_url(path, conditions) do
-    root = Application.get_env(:ex_cwmanage, :cw_api_root)
-    url = "#{root}#{path}#{conditions}"
-    {:ok, url}
-  end
 end
