@@ -1,7 +1,6 @@
 defmodule ExCwmanage.Api do
   @moduledoc """
-  This is the main API logic.  Currently we only support GET with the 'conditions' as an option.
-  Eventually this will encompass all of the HTTP verbs and the allowable ConnectWise 'parameters'
+  This is the main API logic.
   """
 
   @type path :: String.t()
