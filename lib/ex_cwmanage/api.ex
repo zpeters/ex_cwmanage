@@ -1,6 +1,6 @@
 defmodule ExCwmanage.Api do
   @moduledoc """
-  This is the main API logic.
+  Raw API commands
   """
 
   @type path :: String.t()
