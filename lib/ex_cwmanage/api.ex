@@ -5,7 +5,7 @@ defmodule ExCwmanage.Api do
 
   @type path :: String.t()
 
-  @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api)
+  @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
   @callback get(path :: path, opts :: list()) :: map
   def get(path, opts \\ []) do
