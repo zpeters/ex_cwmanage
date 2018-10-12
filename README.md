@@ -2,8 +2,6 @@
 [![Build Status](https://travis-ci.org/zpeters/ex_cwmanage.svg?branch=master)](https://travis-ci.org/zpeters/ex_cwmanage)
 [![Coverage Status](https://coveralls.io/repos/github/zpeters/ex_cwmanage/badge.svg)](https://coveralls.io/github/zpeters/ex_cwmanage)
 
-# ALPHA - WORK IN PROGRESS - DO NOT USE
-
 ## Required Configuration
 The following configuration information is required to connect to the ConnectWise API.  This can be supplied through creating a `dev.secret.exs` and `prod.secret.exs` file or by setting environment variables (preferred for production).
 
@@ -34,7 +32,7 @@ The following environment variables need to be set if you are not using a *secre
 -  `CW_PUBLICKEY`
 -  `CW_PRIVATEKEY`
 
-## Installation - NOT PUBLISHED TO HEX YET
+## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `ex_cwmanage` to your list of dependencies in `mix.exs`:
