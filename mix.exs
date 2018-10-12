@@ -22,7 +22,8 @@ defmodule ExCwmanage.MixProject do
       deps: deps(),
       description: description(),
       package: package(),
-      source_url: "https://github.com/zpeters/ex_cwmanage" # Used to link to code from ExDoc generated docs
+      source_url: "https://github.com/zpeters/ex_cwmanage",
+      homepage_url: "https://github.com/zpeters/ex_cwmanage"
     ]
   end
 
@@ -39,7 +40,10 @@ defmodule ExCwmanage.MixProject do
   defp package() do
     [
       licenses: ["GPL v3.0"],
-      links: %{"GitHub" => "https://github.com/zpeters/ex_cwmanage"}
+      links: %{
+        "GitHub" => "https://github.com/zpeters/ex_cwmanage",
+        "ConnectWise Manage API" => "https://developer.connectwise.com/Products",
+      }
     ]
   end
 
@@ -49,8 +53,7 @@ defmodule ExCwmanage.MixProject do
       {:poison, "~> 4.0.1"},
       {:excoveralls, "~> 0.10.1", only: :test},
       {:credo, "~> 0.10.2", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.19.1", only: :dev, runtime: false},
-      {:inch_ex, only: :docs}
+      {:ex_doc, "~> 0.19.1", only: :dev, runtime: false}
     ]
   end
 end
