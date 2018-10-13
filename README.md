@@ -1,4 +1,6 @@
 # ExCwmanage 
+[![Hex.pm](https://img.shields.io/hexpm/v/ex_cwmanage.svg)](https://hex.pm/packages/ex_cwmanage)
+[![Build Docs](https://img.shields.io/badge/hexdocs-release-blue.svg)](https://hexdocs.pm/ex_cwmanage/ExCwmanage.html)
 [![Build Status](https://travis-ci.org/zpeters/ex_cwmanage.svg?branch=master)](https://travis-ci.org/zpeters/ex_cwmanage)
 [![Coverage Status](https://coveralls.io/repos/github/zpeters/ex_cwmanage/badge.svg)](https://coveralls.io/github/zpeters/ex_cwmanage)
 
