@@ -1,5 +1,3 @@
 defmodule ExCwmanage do
-  @moduledoc """
-  Placeholder
-  """
+  @moduledoc File.read!("#{__DIR__}/../README.md")
 end
