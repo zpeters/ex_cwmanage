@@ -42,7 +42,7 @@ defmodule ExCwmanage.MixProject do
       licenses: ["GPL v3.0"],
       links: %{
         "GitHub" => "https://github.com/zpeters/ex_cwmanage",
-        "ConnectWise Manage API" => "https://developer.connectwise.com/Products",
+        "ConnectWise Manage API" => "https://developer.connectwise.com/Products"
       }
     ]
   end
@@ -50,7 +50,7 @@ defmodule ExCwmanage.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.3.1"},
-      {:poison, "~> 4.0.1"},
+      {:poison, "~> 3.0.0"},
       {:excoveralls, "~> 0.10.1", only: :test},
       {:credo, "~> 0.10.2", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19.1", only: :dev, runtime: false}
