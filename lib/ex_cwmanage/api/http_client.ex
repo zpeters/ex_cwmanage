@@ -25,11 +25,15 @@ defmodule ExCwmanage.Api.HTTPClient do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(@api_root, path),
-         {:ok, http} <- HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, http} <-
+           HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+      err ->
+        err
     end
   end
 
@@ -37,11 +41,15 @@ defmodule ExCwmanage.Api.HTTPClient do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(@api_root, path),
-         {:ok, http} <- HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, http} <-
+           HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+      err ->
+        err
     end
   end
 
@@ -49,11 +57,15 @@ defmodule ExCwmanage.Api.HTTPClient do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(@api_root, path),
-         {:ok, http} <- HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, http} <-
+           HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+      err ->
+        err
     end
   end
 
@@ -61,11 +73,15 @@ defmodule ExCwmanage.Api.HTTPClient do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, http} <-
+           HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+      err ->
+        err
     end
   end
 
