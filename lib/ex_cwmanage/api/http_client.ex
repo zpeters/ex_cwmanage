@@ -5,15 +5,16 @@ defmodule ExCwmanage.Api.HTTPClient do
   Handles generation of security token and and all http communication
   """
 
-  @api_root  Application.get_env(:ex_cwmanage, :cw_api_root)
-  @timeout  Application.get_env(:ex_cwmanage, :http_timeout)
+  @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
+  @timeout Application.get_env(:ex_cwmanage, :http_timeout)
   @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
   def get(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
-         {:ok, http} <- HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
@@ -32,6 +33,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     else
       {:error, :invalid, 0} ->
         {:error, :invalid_body_decode}
+
       err ->
         err
     end
@@ -48,6 +50,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     else
       {:error, :invalid, 0} ->
         {:error, :invalid_body_decode}
+
       err ->
         err
     end
@@ -64,6 +67,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     else
       {:error, :invalid, 0} ->
         {:error, :invalid_body_decode}
+
       err ->
         err
     end
@@ -80,6 +84,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     else
       {:error, :invalid, 0} ->
         {:error, :invalid_body_decode}
+
       err ->
         err
     end
@@ -151,5 +156,4 @@ defmodule ExCwmanage.Api.HTTPClient do
 
     {:ok, headers}
   end
-
 end

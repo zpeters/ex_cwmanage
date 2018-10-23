@@ -56,5 +56,4 @@ defmodule ExCwmanageApiHttpTest do
   test "http delete 404 error" do
     {:error, _err} = HTTPClient.delete("/status/404", [])
   end
-
 end
