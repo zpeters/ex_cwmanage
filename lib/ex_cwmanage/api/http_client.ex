@@ -18,7 +18,11 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, resp} <- Poison.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
     end
   end
 
