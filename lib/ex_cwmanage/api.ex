@@ -7,6 +7,13 @@ defmodule ExCwmanage.Api do
 
   @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
+  @doc """
+  Get a http resource
+
+  Examples:
+  `get("/system/info")`
+  `get("/finances/invoices/count", [:conditions, "id=1234"])`
+  ""'
   @callback get(path :: path, opts :: list()) :: map
   def get(path, opts \\ []) do
     @connectwise_api.get(path, opts)
