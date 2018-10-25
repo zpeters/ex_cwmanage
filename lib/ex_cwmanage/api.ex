@@ -13,7 +13,7 @@ defmodule ExCwmanage.Api do
   Examples:
   `get("/system/info")`
   `get("/finances/invoices/count", [:conditions, "id=1234"])`
-  ""'
+  """
   @callback get(path :: path, opts :: list()) :: map
   def get(path, opts \\ []) do
     @connectwise_api.get(path, opts)
