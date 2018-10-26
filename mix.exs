@@ -51,6 +51,8 @@ defmodule ExCwmanage.MixProject do
     [
       {:httpoison, "~> 1.4.0"},
       {:poison, "~> 4.0.1"},
+      {:jason, "~> 1.1.2"},
+      {:tesla, "~> 1.2.0"},
       {:excoveralls, "~> 0.10.1", only: :test},
       {:credo, "~> 0.10.2", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19.1", only: :dev, runtime: false}

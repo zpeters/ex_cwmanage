@@ -4,7 +4,11 @@ defmodule ExCwmanage.Api.Sandbox do
   """
   @behaviour ExCwmanage.Api
 
-  def get("/service/locations", [:conditions, "id=1"]) do
+  def get(path, opts) do
+     get_http(path, opts)
+   end
+
+  def get_http("/service/locations", [conditions: "id=1"]) do
     {:ok,
      [
        %{
@@ -20,7 +24,7 @@ defmodule ExCwmanage.Api.Sandbox do
      ]}
   end
 
-  def get(path, []) do
+  def get_http(path, []) do
     case path do
       "/system/info" ->
         {:ok,
@@ -94,19 +98,35 @@ defmodule ExCwmanage.Api.Sandbox do
     end
   end
 
-  def post(_path, _payload) do
+  def post(path, payload) do
+    post_http(path, payload)
+  end
+
+  def post_http(_path, _payload) do
     :ok
   end
 
-  def put(_path, _payload) do
+  def put(path, payload) do
+    put_http(path, payload)
+  end
+
+  def put_http(_path, _payload) do
     :ok
   end
 
-  def delete(_path, _parameters) do
+  def delete(path, parameters) do
+    delete_http(path, parameters)
+  end
+
+  def delete_http(_path, _parameters) do
     :ok
   end
 
-  def patch(_path, _payload) do
+  def patch(path, payload) do
+    patch_http(path, payload)
+  end
+
+  def patch_http(_path, _payload) do
     :ok
   end
 end

@@ -17,7 +17,7 @@ defmodule ExCwmanageApiTest do
 
   test "get with conditions" do
     {:ok, resp} = Api.get("/service/locations")
-    {:ok, resp2} = Api.get("/service/locations", [:conditions, "id=1"])
+    {:ok, resp2} = Api.get("/service/locations", [conditions: "id=1"])
     assert length(resp) > 0
     assert length(resp2) > 0
     assert length(resp) > length(resp2)

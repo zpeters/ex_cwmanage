@@ -12,30 +12,31 @@ defmodule ExCwmanage.Api do
 
   Examples:
   `get("/system/info")`
-  `get("/finances/invoices/count", [:conditions, "id=1234"])`
+  `get("/finances/invoices/count", [conditions: "id=1234"])`
+  `get("/finances/invoices", [conditions: "id=1234", orderBy: "id"])`
   """
   @callback get(path :: path, opts :: list()) :: map
   def get(path, opts \\ []) do
-    @connectwise_api.get(path, opts)
+    @connectwise_api.get_http(path, opts)
   end
 
   @callback post(path :: path, payload :: String.t()) :: map
   def post(path, payload) do
-    @connectwise_api.post(path, payload)
+    @connectwise_api.post_http(path, payload)
   end
 
   @callback put(path :: path, payload :: String.t()) :: map
   def put(path, payload) do
-    @connectwise_api.put(path, payload)
+    @connectwise_api.put_http(path, payload)
   end
 
   @callback patch(path :: path, payload :: String.t()) :: map
   def patch(path, payload) do
-    @connectwise_api.patch(path, payload)
+    @connectwise_api.patch_http(path, payload)
   end
 
   @callback delete(path :: path, opts :: list()) :: map
   def delete(path, opts \\ []) do
-    @connectwise_api.delete(path, opts)
+    @connectwise_api.delete_http(path, opts)
   end
 end
