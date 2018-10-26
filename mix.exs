@@ -49,8 +49,6 @@ defmodule ExCwmanage.MixProject do
 
   defp deps do
     [
-      {:httpoison, "~> 1.4.0"},
-      {:poison, "~> 4.0.1"},
       {:jason, "~> 1.1.2"},
       {:tesla, "~> 1.2.0"},
       {:excoveralls, "~> 0.10.1", only: :test},

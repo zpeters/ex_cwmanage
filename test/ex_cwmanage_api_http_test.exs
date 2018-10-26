@@ -27,7 +27,7 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.post_http("/post", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Map.fetch!(resp, "data") |> Poison.decode! == ["this is data"]
+      assert Map.fetch!(resp, "data") |> Jason.decode! == ["this is data"]
     end
     test "http post 404 error" do
       {:ok, resp} = HTTPClient.post("/status/404", [])
@@ -40,7 +40,7 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.put_http("/put", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Map.fetch!(resp, "data") |> Poison.decode! == ["this is data"]
+      assert Map.fetch!(resp, "data") |> Jason.decode! == ["this is data"]
     end
     test "http put 404 error" do
       {:ok, resp} = HTTPClient.put("/status/404", [])
@@ -53,7 +53,7 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.patch_http("/patch", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Map.fetch!(resp, "data") |> Poison.decode! == ["this is data"]
+      assert Map.fetch!(resp, "data") |> Jason.decode! == ["this is data"]
     end
     test "http patch 404 error" do
       {:ok, resp} = HTTPClient.patch("/status/404", [])
