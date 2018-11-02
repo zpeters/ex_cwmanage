@@ -5,10 +5,10 @@ defmodule ExCwmanage.Api.Sandbox do
   @behaviour ExCwmanage.Api
 
   def get(path, opts) do
-     get_http(path, opts)
-   end
+    get_http(path, opts)
+  end
 
-  def get_http("/service/locations", [conditions: "id=1"]) do
+  def get_http("/service/locations", conditions: "id=1") do
     {:ok,
      [
        %{
