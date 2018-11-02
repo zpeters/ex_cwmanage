@@ -34,6 +34,39 @@ The following environment variables need to be set if you are not using a *secre
 -  `CW_PUBLICKEY`
 -  `CW_PRIVATEKEY`
 
+## Usage
+### API Requests
+The api follows the standard HTTP REST conventions outlined in the ConnectWise API
+```
+HTTP Methods
+
+    POST
+        Create entity or any non CRUD action
+    GET
+        Return entity or list of entities
+    PUT
+        Replace all fields on entity with supplied fields
+    PATCH
+        Update specific fields on an entity
+    DELETE
+        Remove entity
+```
+### Options
+Different resources in the api allow addition options to be passed along using normal url "query" formatting.  Full details are available here https://developer.connectwise.com/Products/Manage/Developer_Guide#Query_String_Parameters
+
+#### Examples
+  `ExCwmanage.Api.get("/system/info")`
+  
+  `ExCwmanage.Api.get("/finances/invoices/count", [conditions: "id=1234"])`
+  
+  `ExCwmanage.Api.get("/finances/invoices", [conditions: "id=1234", orderBy: "id"])`
+
+### The ConnecWise API
+https://developer.connectwise.com/Products/Manage/Developer_Guide
+
+
+
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
