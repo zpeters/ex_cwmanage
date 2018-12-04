@@ -12,15 +12,15 @@ defmodule ExCwmanageApiHttpTest do
     end
 
     test "http /get test with conditions" do
-      {:ok, resp} = HTTPClient.get_http("/get", conditions: "key=value")
+      {:ok, resp} = HTTPClient.get_http("/get", [conditions: "key=value"])
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
       assert Map.fetch!(resp, "args") == %{"conditions" => "key=value"}
     end
 
     test "http get 404 error" do
-      {:ok, resp} = HTTPClient.get("/status/404", [])
-      assert resp.status == 404
+      {:ok, resp} = HTTPClient.get_http("/status/404")
+      assert resp.status_code == 404
     end
   end
 
