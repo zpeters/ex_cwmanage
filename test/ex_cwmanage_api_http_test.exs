@@ -12,15 +12,15 @@ defmodule ExCwmanageApiHttpTest do
     end
 
     test "http /get test with conditions" do
-      {:ok, resp} = HTTPClient.get_http("/get", conditions: "key=value")
+      {:ok, resp} = HTTPClient.get_http("/get", [conditions: "key=value"])
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
       assert Map.fetch!(resp, "args") == %{"conditions" => "key=value"}
     end
 
     test "http get 404 error" do
-      {:ok, resp} = HTTPClient.get("/status/404", [])
-      assert resp.status == 404
+      {:error, resp} = HTTPClient.get_http("/status/404")
+      assert resp
     end
   end
 
@@ -29,12 +29,12 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.post_http("/post", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Jason.decode!(Map.fetch!(resp, "data")) == ["this is data"]
+      assert Map.fetch!(resp, "data") == "this is data"
     end
 
     test "http post 404 error" do
-      {:ok, resp} = HTTPClient.post("/status/404", [])
-      assert resp.status == 404
+      {:error, resp} = HTTPClient.post_http("/status/404", [])
+      assert resp
     end
   end
 
@@ -43,12 +43,12 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.put_http("/put", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Jason.decode!(Map.fetch!(resp, "data")) == ["this is data"]
+      assert Map.fetch!(resp, "data") == "this is data"
     end
 
     test "http put 404 error" do
-      {:ok, resp} = HTTPClient.put("/status/404", [])
-      assert resp.status == 404
+      {:error, resp} = HTTPClient.put_http("/status/404", [])
+      assert resp
     end
   end
 
@@ -57,12 +57,12 @@ defmodule ExCwmanageApiHttpTest do
       {:ok, resp} = HTTPClient.patch_http("/patch", ["this is data"])
       assert is_map(resp)
       assert Map.has_key?(resp, "data")
-      assert Jason.decode!(Map.fetch!(resp, "data")) == ["this is data"]
+      assert Map.fetch!(resp, "data") == "this is data"
     end
 
     test "http patch 404 error" do
-      {:ok, resp} = HTTPClient.patch("/status/404", [])
-      assert resp.status == 404
+      {:error, resp} = HTTPClient.patch_http("/status/404", [])
+      assert resp
     end
   end
 
@@ -81,8 +81,8 @@ defmodule ExCwmanageApiHttpTest do
     end
 
     test "http delete 404 error" do
-      {:ok, resp} = HTTPClient.delete("/status/404", [])
-      assert resp.status == 404
+      {:error, resp} = HTTPClient.delete_http("/status/404", [])
+      assert resp
     end
   end
 end
