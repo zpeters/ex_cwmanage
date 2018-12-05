@@ -26,3 +26,5 @@ ex_cwmanage-*.tar
 config/prod.secret.exs
 config/dev.secret.exs
 config/test.secret.exs
+
+.elixir_ls/

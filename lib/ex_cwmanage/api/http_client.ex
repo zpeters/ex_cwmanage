@@ -2,69 +2,80 @@ defmodule ExCwmanage.Api.HTTPClient do
   @moduledoc """
   HTTP Client implementation of the ConnectWise API
   """
-  use Tesla
 
-  @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
 
-  plug(Tesla.Middleware.BaseUrl, @api_root)
-
-  plug(Tesla.Middleware.Headers, [
-    {"Authorization", "Basic #{generate_token()}"},
-    {"Accept", "application/vnd.connectwise.com+json; version=3.0.0"},
-    {"Content-Type", "application/json"}
-  ])
-
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.Logger)
 
   def get_http(path, opts \\ []) do
-    {:ok, resp} = get(path, query: opts)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+      {:ok, headers} <- generate_headers(),
+      {:ok, options} <- generate_options(opts),
+      {:ok, http} <- HTTPoison.get(url, headers, options),
+      {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
+    else
+      err ->
+        {:error, err}
+    end
   end
 
   def post_http(path, payload) do
-    {:ok, resp} = post(path, payload)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+    {:ok, headers} <- generate_headers(),
+    {:ok, http} <- HTTPoison.post(url, payload, headers),
+    {:ok, resp} <- Jason.decode(http.body) do
+    {:ok, resp}
+    else
+      err -> {:error, err}
+    end
   end
 
   def put_http(path, payload) do
-    {:ok, resp} = put(path, payload)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+    {:ok, headers} <- generate_headers(),
+    {:ok, http} <- HTTPoison.put(url, payload, headers),
+    {:ok, resp} <- Jason.decode(http.body) do
+    {:ok, resp}
+    else
+      err -> {:error, err}
+    end
   end
 
   def patch_http(path, payload) do
-    {:ok, resp} = patch(path, payload)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+         {:ok, headers} <- generate_headers(),
+         {:ok, http} <- HTTPoison.patch(url, payload, headers),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> {:error, err}
+    end
   end
 
   def delete_http(path, opts \\ []) do
-    {:ok, resp} = delete(path, query: opts)
+    with {:ok, url} <- generate_url(path),
+         {:ok, headers} <- generate_headers(),
+         {:ok, options} <- generate_options(opts),
+         {:ok, http} <- HTTPoison.delete(url, headers, options),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
+    else
+      err ->
+        {:error, err}
+    end
+  end
 
-    body =
-      resp
-      |> Map.fetch!(:body)
+  defp generate_url(path) do
+    root = Application.get_env(:ex_cwmanage, :cw_api_root)
+    {:ok, "#{root}#{path}"}
+  end
 
-    {:ok, body}
+  defp generate_headers do
+    headers = [
+      {"Authorization", "Basic #{generate_token()}"},
+      {"Accept", "application/vnd.connectwise.com+json; version=3.0.0"},
+      {"Content-Type", "application/json"}
+    ]
+    {:ok, headers}
   end
 
   defp generate_token do
@@ -74,4 +85,13 @@ defmodule ExCwmanage.Api.HTTPClient do
     token = "#{id}+#{pub}:#{priv}"
     Base.encode64(token)
   end
+
+  defp generate_options(opts) do
+      if opts == [] do
+        {:ok, []}
+      else
+        {:ok, [params: [{"conditions", Keyword.get(opts, :conditions)}]]}
+      end
+  end
+
 end
