@@ -13,7 +13,8 @@ defmodule ExCwmanage.Api.HTTPClient do
       {:ok, resp} <- Jason.decode(http.body) do
       {:ok, resp}
     else
-      err -> err
+      err ->
+        {:error, err}
     end
   end
 
@@ -24,7 +25,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, resp} <- Jason.decode(http.body) do
     {:ok, resp}
     else
-      err -> err
+      err -> {:error, err}
     end
   end
 
@@ -35,37 +36,32 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, resp} <- Jason.decode(http.body) do
     {:ok, resp}
     else
-      err -> err
+      err -> {:error, err}
     end
   end
 
   def patch_http(path, payload) do
-    url = generate_url(path)
-    headers = generate_headers()
-
-    {:ok, resp} = HTTPoison.patch(url, payload, headers)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-      |> Jason.decode!
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+         {:ok, headers} <- generate_headers(),
+         {:ok, http} <- HTTPoison.patch(url, payload, headers),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
+    else
+      err -> {:error, err}
+    end
   end
 
   def delete_http(path, opts \\ []) do
-    url = generate_url(path)
-    headers = generate_headers()
-    options = [query: opts]
-
-    {:ok, resp} = HTTPoison.delete(url, headers, options)
-
-    body =
-      resp
-      |> Map.fetch!(:body)
-      |> Jason.decode!
-
-    {:ok, body}
+    with {:ok, url} <- generate_url(path),
+         {:ok, headers} <- generate_headers(),
+         {:ok, options} <- generate_options(opts),
+         {:ok, http} <- HTTPoison.delete(url, headers, options),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
+    else
+      err ->
+        {:error, err}
+    end
   end
 
   defp generate_url(path) do
