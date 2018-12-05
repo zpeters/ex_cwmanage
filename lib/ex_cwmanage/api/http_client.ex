@@ -1,81 +1,139 @@
 defmodule ExCwmanage.Api.HTTPClient do
   @moduledoc """
-  HTTP Client implementation of the ConnectWise API
+  HTTP Interaction with the ConnectWise api.
+
+  Handles generation of security token and and all http communication
   """
 
+  @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
+  @timeout Application.get_env(:ex_cwmanage, :http_timeout)
+  @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
+  def get_http_raw(path, opts \\ []) do
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout) do
+      {:ok, http.body}
+    else
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
+    end
+  end
 
   def get_http(path, opts \\ []) do
-    with {:ok, url} <- generate_url(path),
-      {:ok, headers} <- generate_headers(),
-      {:ok, options} <- generate_options(opts),
-      {:ok, http} <- HTTPoison.get(url, headers, options),
-      {:ok, resp} <- Jason.decode(http.body) do
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, resp} <- Jason.decode(http.body) do
       {:ok, resp}
     else
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
       err ->
-        {:error, err}
+        err
     end
   end
 
   def post_http(path, payload) do
-    with {:ok, url} <- generate_url(path),
-    {:ok, headers} <- generate_headers(),
-    {:ok, http} <- HTTPoison.post(url, payload, headers),
-    {:ok, resp} <- Jason.decode(http.body) do
-    {:ok, resp}
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <-
+           HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
     else
-      err -> {:error, err}
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
     end
   end
 
   def put_http(path, payload) do
-    with {:ok, url} <- generate_url(path),
-    {:ok, headers} <- generate_headers(),
-    {:ok, http} <- HTTPoison.put(url, payload, headers),
-    {:ok, resp} <- Jason.decode(http.body) do
-    {:ok, resp}
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <-
+           HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, resp} <- Jason.decode(http.body) do
+      {:ok, resp}
     else
-      err -> {:error, err}
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
     end
   end
 
   def patch_http(path, payload) do
-    with {:ok, url} <- generate_url(path),
-         {:ok, headers} <- generate_headers(),
-         {:ok, http} <- HTTPoison.patch(url, payload, headers),
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, http} <-
+           HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
       {:ok, resp}
     else
-      err -> {:error, err}
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
     end
   end
 
   def delete_http(path, opts \\ []) do
-    with {:ok, url} <- generate_url(path),
-         {:ok, headers} <- generate_headers(),
-         {:ok, options} <- generate_options(opts),
-         {:ok, http} <- HTTPoison.delete(url, headers, options),
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <-
+           HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
       {:ok, resp}
     else
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
       err ->
-        {:error, err}
+        err
     end
   end
 
-  defp generate_url(path) do
-    root = Application.get_env(:ex_cwmanage, :cw_api_root)
-    {:ok, "#{root}#{path}"}
+  defp generate_url(api_root, path, conditions \\ []) do
+    url = "#{api_root}#{path}#{conditions}"
+    {:ok, url}
   end
 
-  defp generate_headers do
-    headers = [
-      {"Authorization", "Basic #{generate_token()}"},
-      {"Accept", "application/vnd.connectwise.com+json; version=3.0.0"},
-      {"Content-Type", "application/json"}
-    ]
-    {:ok, headers}
+  def test do
+    parms = [conditions: 'status/name contains "New" and board/name = "Service Desk"', fields: "id"]
+    generate_parameters(parms)
+  end
+
+
+  def generate_parameters(parameters) do
+    case parameters do
+      [] ->
+        []
+      _ ->
+        parms = parameters
+        |> Keyword.keys
+        |> Enum.map(&("#{&1}=#{Keyword.get(parameters, &1)}"))
+        |> Enum.join("&")
+
+        "?#{parms}"
+	|> URI.encode
+    end
   end
 
   defp generate_token do
@@ -83,15 +141,16 @@ defmodule ExCwmanage.Api.HTTPClient do
     pub = Application.get_env(:ex_cwmanage, :cw_publickey)
     priv = Application.get_env(:ex_cwmanage, :cw_privatekey)
     token = "#{id}+#{pub}:#{priv}"
-    Base.encode64(token)
+    {:ok, Base.encode64(token)}
   end
 
-  defp generate_options(opts) do
-      if opts == [] do
-        {:ok, []}
-      else
-        {:ok, [params: [{"conditions", Keyword.get(opts, :conditions)}]]}
-      end
-  end
+  defp generate_headers(token) do
+    headers = [
+      Authorization: "Basic #{token}",
+      Accept: "application/vnd.connectwise.com+json; version=3.0.0",
+      "Content-Type": "application/json"
+    ]
 
+    {:ok, headers}
+  end
 end

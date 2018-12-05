@@ -74,7 +74,7 @@ defmodule ExCwmanageApiHttpTest do
     end
 
     test "http /delete test with conditions" do
-      {:ok, resp} = HTTPClient.delete_http("/delete", conditions: "key=value")
+      {:ok, resp} = HTTPClient.delete_http("/delete", [conditions: "key=value"])
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
       assert Map.fetch!(resp, "args") == %{"conditions" => "key=value"}
@@ -84,5 +84,12 @@ defmodule ExCwmanageApiHttpTest do
       {:error, resp} = HTTPClient.delete_http("/status/404", [])
       assert resp
     end
+  end
+
+  test "http get with conditions and fields" do
+    {:ok, resp} = HTTPClient.get_http("/get", [conditions: "key=value", fields: "id,length"])
+    assert is_map(resp)
+    assert Map.has_key?(resp, "args")
+    assert Map.fetch!(resp, "args") == %{"conditions" => "key=value", "fields" => "id,length"}
   end
 end
