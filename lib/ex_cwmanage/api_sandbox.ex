@@ -8,6 +8,10 @@ defmodule ExCwmanage.Api.Sandbox do
     get_http(path, opts)
   end
 
+  def get_raw(path, opts) do
+    get_http_raw(path, opts)
+  end
+
   def get_http("/service/locations", conditions: "id=1") do
     {:ok,
      [
@@ -96,6 +100,10 @@ defmodule ExCwmanage.Api.Sandbox do
       _ ->
         {:error, {:invalid, "<", 0}}
     end
+  end
+
+  def get_http_raw(_path, _opts) do
+    :ok
   end
 
   def post(path, payload) do

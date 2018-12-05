@@ -1,13 +1,29 @@
 defmodule ExCwmanage.Api.HTTPClient do
   @moduledoc """
   HTTP Interaction with the ConnectWise api.
-  
+
   Handles generation of security token and and all http communication
   """
 
   @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
   @timeout Application.get_env(:ex_cwmanage, :http_timeout)
   @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
+
+  def get_http_raw(path, opts \\ []) do
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout) do
+      {:ok, http.body}
+    else
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
+    end
+  end
 
   def get_http(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
@@ -99,50 +115,24 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, url}
   end
 
-  defp generate_parameters(parameters) do
-    cond do
-      parameters == [] ->
-        nil
-
-      length(parameters) == 2 ->
-        {parameter, value} = process_parameter(parameters)
-        '?#{parameter}=#{value}'
-
-      true ->
-        parms =
-          parameters
-          |> Enum.chunk_every(2)
-          |> Enum.map(&process_parameter(&1))
-
-        parameter_joiner(parms)
-    end
+  def test do
+    parms = [conditions: 'status/name contains "New" and board/name = "Service Desk"', fields: "id"]
+    generate_parameters(parms)
   end
 
-  defp parameter_joiner(parameters) do
-    parms =
-      parameters
-      |> Enum.map(&'#{elem(&1, 0)}=#{elem(&1, 1)}')
 
-    parm_string = Enum.join(parms, "&")
-    "?#{parm_string}"
-  end
+  def generate_parameters(parameters) do
+    case parameters do
+      [] ->
+        []
+      _ ->
+        parms = parameters
+        |> Keyword.keys
+        |> Enum.map(&("#{&1}=#{Keyword.get(parameters, &1)}"))
+        |> Enum.join("&")
 
-  defp process_parameter(parameters) do
-    parameter = List.first(parameters)
-    value = List.last(parameters)
-
-    case parameter do
-      :conditions ->
-        {"conditions", value}
-
-      :page ->
-        {"page", value}
-
-      :fields ->
-        {"fields", value}
-
-      _unknown ->
-        {:error, :unknown_option}
+        "?#{parms}"
+	|> URI.encode
     end
   end
 

@@ -7,6 +7,11 @@ defmodule ExCwmanage.Api do
 
   @connectwise_api Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
+  @callback get_raw(path :: path, opts :: list()) :: binary()
+  def get_raw(path, opts \\ []) do
+    @connectwise_api.get_http_raw(path, opts)
+  end
+
   @callback get(path :: path, opts :: list()) :: map
   def get(path, opts \\ []) do
     @connectwise_api.get_http(path, opts)
