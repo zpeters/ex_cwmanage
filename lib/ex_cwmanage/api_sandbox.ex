@@ -8,6 +8,10 @@ defmodule ExCwmanage.Api.Sandbox do
     get_http(path, opts)
   end
 
+  def get_page(path, pageid, pagesize, opts) do
+    get_http_page(path, pageid, pagesize, opts)
+  end
+
   def get_raw(path, opts) do
     get_http_raw(path, opts)
   end
@@ -103,6 +107,10 @@ defmodule ExCwmanage.Api.Sandbox do
   end
 
   def get_http_raw(_path, _opts) do
+    :ok
+  end
+
+  def get_http_page(_path, _pageid, _pagesize, _opts) do
     :ok
   end
 

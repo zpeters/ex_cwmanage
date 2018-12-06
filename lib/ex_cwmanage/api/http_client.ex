@@ -5,6 +5,8 @@ defmodule ExCwmanage.Api.HTTPClient do
   Handles generation of security token and and all http communication
   """
 
+  require Logger
+
   @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
   @timeout Application.get_env(:ex_cwmanage, :http_timeout)
   @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
@@ -15,6 +17,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, http.body}
     else
       {:error, :invalid, 0} ->
@@ -32,7 +35,33 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, resp}
+    else
+      {:error, :invalid, 0} ->
+        {:error, :invalid_body_decode}
+
+      err ->
+        err
+    end
+  end
+
+  def get_http_page(path, pageid \\ [], pagesize \\ 25, opts \\ []) do
+    all_opts = [pagesize: pagesize] ++ [pageid: pageid] ++ opts
+
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(all_opts)),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+         {:ok, resp} <- Jason.decode(http.body) do
+      case next_page(http.headers) do
+        nil ->
+          {:ok, nil, resp}
+
+        page ->
+          {:ok, page, resp}
+      end
     else
       {:error, :invalid, 0} ->
         {:error, :invalid_body_decode}
@@ -49,6 +78,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, http} <-
            HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, resp}
     else
       {:error, :invalid, 0} ->
@@ -66,6 +96,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, http} <-
            HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, resp}
     else
       {:error, :invalid, 0} ->
@@ -83,6 +114,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, http} <-
            HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, resp}
     else
       {:error, :invalid, 0} ->
@@ -100,6 +132,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, http} <-
            HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, resp}
     else
       {:error, :invalid, 0} ->
@@ -116,23 +149,28 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   def test do
-    parms = [conditions: 'status/name contains "New" and board/name = "Service Desk"', fields: "id"]
+    parms = [
+      conditions: 'status/name contains "New" and board/name = "Service Desk"',
+      fields: "id"
+    ]
+
     generate_parameters(parms)
   end
-
 
   def generate_parameters(parameters) do
     case parameters do
       [] ->
         []
+
       _ ->
-        parms = parameters
-        |> Keyword.keys
-        |> Enum.map(&("#{&1}=#{Keyword.get(parameters, &1)}"))
-        |> Enum.join("&")
+        parms =
+          parameters
+          |> Keyword.keys()
+          |> Enum.map(&"#{&1}=#{Keyword.get(parameters, &1)}")
+          |> Enum.join("&")
 
         "?#{parms}"
-	|> URI.encode
+        |> URI.encode()
     end
   end
 
@@ -148,9 +186,26 @@ defmodule ExCwmanage.Api.HTTPClient do
     headers = [
       Authorization: "Basic #{token}",
       Accept: "application/vnd.connectwise.com+json; version=3.0.0",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Pagination-Type": "forward-only"
     ]
 
     {:ok, headers}
+  end
+
+  defp next_page(headers) do
+    link = List.keyfind(headers, "Link", 0)
+
+    case link do
+      {"Link", url} ->
+        url
+        |> String.split("pageId=")
+        |> List.last()
+        |> String.split(">;")
+        |> List.first()
+
+      _ ->
+        nil
+    end
   end
 end
