@@ -46,7 +46,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get_http_page(path, pageid \\ [], pagesize \\ 25, opts \\ []) do
+  def get_http_page(path, pagesize \\ [], pageid \\ 25, opts \\ []) do
     all_opts = [pagesize: pagesize] ++ [pageid: pageid] ++ opts
 
     with {:ok, token} <- generate_token(),

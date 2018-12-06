@@ -19,8 +19,8 @@ defmodule ExCwmanage.Api do
 
   @callback get_page(path :: path, pageid :: String.t(), pagesize :: String.t(), opts :: list()) ::
               map
-  def get_page(path, pageid \\ [], pagesize \\ [], opts \\ []) do
-    @connectwise_api.get_http_page(path, pageid, pagesize, opts)
+  def get_page(path, pagesize \\ [], pageid \\ [], opts \\ []) do
+    @connectwise_api.get_http_page(path, pagesize, pageid, opts)
   end
 
   @callback post(path :: path, payload :: String.t()) :: map
