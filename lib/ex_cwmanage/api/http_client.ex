@@ -46,12 +46,10 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get_http_page(path, pageid \\ [], pagesize \\ 25, opts \\ []) do
-    all_opts = [pagesize: pagesize] ++ [pageid: pageid] ++ opts
-
+  def get_http_page(path, opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(all_opts)),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, resp} <- Jason.decode(http.body) do
@@ -146,15 +144,6 @@ defmodule ExCwmanage.Api.HTTPClient do
   defp generate_url(api_root, path, conditions \\ []) do
     url = "#{api_root}#{path}#{conditions}"
     {:ok, url}
-  end
-
-  def test do
-    parms = [
-      conditions: 'status/name contains "New" and board/name = "Service Desk"',
-      fields: "id"
-    ]
-
-    generate_parameters(parms)
   end
 
   def generate_parameters(parameters) do

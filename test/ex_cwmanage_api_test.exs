@@ -4,6 +4,19 @@ defmodule ExCwmanageApiTest do
 
   alias ExCwmanage.Api, as: Api
 
+
+  test "test get page default" do
+    {:ok, next, resp} = Api.get_page("/company/companies")
+    assert next != nil
+    assert next > 0
+    assert is_map(resp)
+  end
+
+  test "test get raw page (no json)" do
+    {:ok, resp} = Api.get_raw("/system/info")
+    assert is_binary(resp)
+  end
+
   test "test get no conditions" do
     {:ok, resp} = Api.get("/system/info")
     assert is_map(resp)

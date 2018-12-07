@@ -17,10 +17,15 @@ defmodule ExCwmanage.Api do
     @connectwise_api.get_http(path, opts)
   end
 
-  @callback get_page(path :: path, pageid :: String.t(), pagesize :: String.t(), opts :: list()) ::
-              map
-  def get_page(path, pageid \\ [], pagesize \\ [], opts \\ []) do
-    @connectwise_api.get_http_page(path, pageid, pagesize, opts)
+  @callback get_page(path :: path, opts :: list()) :: map
+  @doc """
+  Example
+  Initial call `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies")`
+  Next page `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies", [pageid: next])`
+  Next page (custom page size) `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies", [pageid: next], [pagesize: 10])`
+  """
+  def get_page(path, opts \\ []) do
+    @connectwise_api.get_http_page(path, opts)
   end
 
   @callback post(path :: path, payload :: String.t()) :: map

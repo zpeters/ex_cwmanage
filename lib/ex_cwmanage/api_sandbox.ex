@@ -8,8 +8,8 @@ defmodule ExCwmanage.Api.Sandbox do
     get_http(path, opts)
   end
 
-  def get_page(path, pageid, pagesize, opts) do
-    get_http_page(path, pageid, pagesize, opts)
+  def get_page(path, opts) do
+    get_http_page(path, opts)
   end
 
   def get_raw(path, opts) do
@@ -107,11 +107,11 @@ defmodule ExCwmanage.Api.Sandbox do
   end
 
   def get_http_raw(_path, _opts) do
-    :ok
+    {:ok, "a string is a binary"}
   end
 
-  def get_http_page(_path, _pageid, _pagesize, _opts) do
-    :ok
+  def get_http_page(_path, _opts) do
+    {:ok, 123, %{}}
   end
 
   def post(path, payload) do
