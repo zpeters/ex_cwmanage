@@ -4,7 +4,6 @@ defmodule ExCwmanageApiTest do
 
   alias ExCwmanage.Api, as: Api
 
-
   test "test get page default" do
     {:ok, next, resp} = Api.get_page("/company/companies")
     assert next != nil
