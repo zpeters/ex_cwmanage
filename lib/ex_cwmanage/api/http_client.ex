@@ -11,10 +11,10 @@ defmodule ExCwmanage.Api.HTTPClient do
   @timeout Application.get_env(:ex_cwmanage, :http_timeout)
   @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
-  def get_http_raw(path, opts \\ []) do
+  def get_http_raw(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, _} <- status_check(http) do
@@ -26,10 +26,10 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get_http(path, opts \\ []) do
+  def get_http(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, _} <- status_check(http),
@@ -45,10 +45,10 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get_http_page(path, opts \\ []) do
+  def get_http_page(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, _} <- status_check(http),
@@ -126,10 +126,10 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def delete_http(path, opts \\ []) do
+  def delete_http(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(opts)),
+         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
          {:ok, http} <-
            HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
          {:ok, _} <- status_check(http),
