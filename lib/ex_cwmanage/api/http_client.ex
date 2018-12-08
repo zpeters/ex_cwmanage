@@ -11,7 +11,7 @@ defmodule ExCwmanage.Api.HTTPClient do
   @timeout Application.get_env(:ex_cwmanage, :http_timeout)
   @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
-  def generate_upload_form(rec_id, rec_type, file_page) do
+  def generate_upload_form(rec_id, rec_type, file_path) do
     {:multipart, [{"RecordId", "#{rec_id}}"}, {"RecordType", rec_type},
                   {:file, file_path, {"form-data", [{:filename, Path.basename(file_path)}]}, []}]}
   end

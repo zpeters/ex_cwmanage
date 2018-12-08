@@ -61,6 +61,8 @@ Different resources in the api allow addition options to be passed along using n
   
   `ExCwmanage.Api.get("/finances/invoices", [conditions: "id=1234", orderBy: "id"])`
 
+  `ExCwmanage.Api.get_page("/finances/invoices", [pagesize: 100, pageid: 123])`
+
 ### The ConnecWise API
 https://developer.connectwise.com/Products/Manage/Developer_Guide
 
