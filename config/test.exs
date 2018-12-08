@@ -1,5 +1,8 @@
 use Mix.Config
 
+config :logger,
+  level: :info
+
 config :ex_cwmanage,
   cw_api_root: "https://httpbin.org/",
   cw_companyid: "fake",

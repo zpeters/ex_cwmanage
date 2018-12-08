@@ -4,12 +4,16 @@ defmodule ExCwmanage.Api.Sandbox do
   """
   @behaviour ExCwmanage.Api
 
-  def get(path, opts) do
-    get_http(path, opts)
+  def get(path, params) do
+    get_http(path, params)
   end
 
-  def get_raw(path, opts) do
-    get_http_raw(path, opts)
+  def get_page(path, params) do
+    get_http_page(path, params)
+  end
+
+  def get_raw(path, params) do
+    get_http_raw(path, params)
   end
 
   def get_http("/service/locations", conditions: "id=1") do
@@ -102,8 +106,12 @@ defmodule ExCwmanage.Api.Sandbox do
     end
   end
 
-  def get_http_raw(_path, _opts) do
-    :ok
+  def get_http_raw(_path, _params) do
+    {:ok, "a string is a binary"}
+  end
+
+  def get_http_page(_path, _params) do
+    {:ok, 123, %{}}
   end
 
   def post(path, payload) do

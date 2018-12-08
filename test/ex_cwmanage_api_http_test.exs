@@ -4,15 +4,21 @@ defmodule ExCwmanageApiHttpTest do
 
   alias ExCwmanage.Api.HTTPClient, as: HTTPClient
 
-  describe "get_http/1 and get_http/2" do
+  describe "get_http/1 and get_http/2 and get_http_raw variants" do
     test "http /get test" do
       {:ok, resp} = HTTPClient.get_http("/get")
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
     end
 
+    test "http_raw get test" do
+      {:ok, resp} = HTTPClient.get_http_raw("/get")
+      assert !is_map(resp)
+      assert is_binary(resp)
+    end
+
     test "http /get test with conditions" do
-      {:ok, resp} = HTTPClient.get_http("/get", [conditions: "key=value"])
+      {:ok, resp} = HTTPClient.get_http("/get", conditions: "key=value")
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
       assert Map.fetch!(resp, "args") == %{"conditions" => "key=value"}
@@ -20,6 +26,29 @@ defmodule ExCwmanageApiHttpTest do
 
     test "http get 404 error" do
       {:error, resp} = HTTPClient.get_http("/status/404")
+      assert resp
+    end
+
+    test "http raw get 404 error" do
+      {:error, resp} = HTTPClient.get_http_raw("/status/404")
+      assert resp
+    end
+
+    test "http page get 404 error" do
+      {:error, resp} = HTTPClient.get_http_page("/status/404")
+      assert resp
+    end
+
+    test "http test get page" do
+      {:ok, page, resp} = HTTPClient.get_http_page("/response-headers?Link=pageId=4567")
+      {num, _} = Integer.parse(page)
+      assert is_integer(num)
+      assert resp
+    end
+
+    test "http test no pages" do
+      {:ok, page, resp} = HTTPClient.get_http_page("/response-headers")
+      assert page == nil
       assert resp
     end
   end
@@ -74,7 +103,7 @@ defmodule ExCwmanageApiHttpTest do
     end
 
     test "http /delete test with conditions" do
-      {:ok, resp} = HTTPClient.delete_http("/delete", [conditions: "key=value"])
+      {:ok, resp} = HTTPClient.delete_http("/delete", conditions: "key=value")
       assert is_map(resp)
       assert Map.has_key?(resp, "args")
       assert Map.fetch!(resp, "args") == %{"conditions" => "key=value"}
@@ -87,7 +116,7 @@ defmodule ExCwmanageApiHttpTest do
   end
 
   test "http get with conditions and fields" do
-    {:ok, resp} = HTTPClient.get_http("/get", [conditions: "key=value", fields: "id,length"])
+    {:ok, resp} = HTTPClient.get_http("/get", conditions: "key=value", fields: "id,length")
     assert is_map(resp)
     assert Map.has_key?(resp, "args")
     assert Map.fetch!(resp, "args") == %{"conditions" => "key=value", "fields" => "id,length"}
