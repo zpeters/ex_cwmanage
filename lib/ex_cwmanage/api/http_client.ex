@@ -52,7 +52,7 @@ defmodule ExCwmanage.Api.HTTPClient do
 
   def get_http_page(path, params \\ []) do
     with {:ok, token} <- generate_token(),
-         {:ok, headers} <- generate_headers(token),
+         {:ok, headers} <- generate_pagination_headers(token),
          {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
          {:ok, http} <-
            HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
@@ -150,7 +150,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  defp generate_url(api_root, path, conditions \\ []) do
+  def generate_url(api_root, path, conditions \\ []) do
     url = "#{api_root}#{path}#{conditions}"
     {:ok, url}
   end
@@ -190,12 +190,22 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, Base.encode64(token)}
   end
 
-  defp generate_headers(token) do
+  defp generate_pagination_headers(token) do
     headers = [
       Authorization: "Basic #{token}",
       Accept: "application/vnd.connectwise.com+json; version=3.0.0",
       "Content-Type": "application/json",
       "Pagination-Type": "forward-only"
+    ]
+
+    {:ok, headers}
+  end
+
+  def generate_headers(token) do
+    headers = [
+      Authorization: "Basic #{token}",
+      Accept: "application/vnd.connectwise.com+json; version=3.0.0",
+      "Content-Type": "application/json"
     ]
 
     {:ok, headers}
