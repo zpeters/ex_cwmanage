@@ -5,7 +5,7 @@ defmodule ExCwmanage.MixProject do
     [
       app: :ex_cwmanage,
       name: "ExCwmanage",
-      version: "0.1.9-a",
+      version: "0.1.10",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
