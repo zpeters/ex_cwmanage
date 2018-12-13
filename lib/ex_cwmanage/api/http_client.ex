@@ -176,7 +176,8 @@ defmodule ExCwmanage.Api.HTTPClient do
     case http_response.status_code do
       200 ->
         {:ok, http_response}
-
+      201 ->
+        {:ok, http_response}
       _ ->
         {:error, http_response}
     end
