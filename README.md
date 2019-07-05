@@ -15,6 +15,7 @@ The following configuration information is required to connect to the ConnectWis
  - Example API root url `https://api-na.myconnectwise.net/v4_6_release/apis/3.0/`
 2. Company Id: When you log into connectwise this is your *Company Name*
 3. Public and Private Key:  (Follow this guide https://docs.connectwise.com/ConnectWise_Documentation/090/040/010/010/060)
+4. Create a "client id": https://developer.connectwise.com/ClientID 
 
 ### Using secret files
 `dev.secret.exs` and `prod.secret.exs` are in the `config` folder and are called based on the environment you are in.  Below is an example file
@@ -26,6 +27,7 @@ config :ex_cwmanage,
   cw_companyid: "MYCOMPANYID",
   cw_publickey: "MYPUBLICKEY",
   cw_privatekey: "MYPRIVATEKEY"
+  cw_clientid: "MYCLIENTID"
 ```
 ### Using environment variables
 The following environment variables need to be set if you are not using a *secret* file. This is the recommended method for production.
@@ -33,6 +35,7 @@ The following environment variables need to be set if you are not using a *secre
 -  `CW_COMPANYID`
 -  `CW_PUBLICKEY`
 -  `CW_PRIVATEKEY`
+-  `CW_CLIENTID`
 
 ## Usage
 ### API Requests
@@ -77,7 +80,7 @@ by adding `ex_cwmanage` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_cwmanage, "~> 0.1.0"}
+    {:ex_cwmanage, "~> 0.2.0"}
   ]
 end
 ```
