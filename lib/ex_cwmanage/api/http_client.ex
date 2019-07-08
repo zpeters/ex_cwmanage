@@ -196,6 +196,7 @@ defmodule ExCwmanage.Api.HTTPClient do
       Authorization: "Basic #{token}",
       Accept: "application/vnd.connectwise.com+json; version=3.0.0",
       "Content-Type": "application/json",
+      clientId: Application.get_env(:ex_cwmanage, :cw_clientid),
       "Pagination-Type": "forward-only"
     ]
 
