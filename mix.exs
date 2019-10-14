@@ -5,7 +5,7 @@ defmodule ExCwmanage.MixProject do
     [
       app: :ex_cwmanage,
       name: "ExCwmanage",
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -49,10 +49,10 @@ defmodule ExCwmanage.MixProject do
 
   defp deps do
     [
-      {:httpoison, "~> 1.6.0"},
-      {:excoveralls, "~> 0.11.1", only: :test},
-      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.21.0", only: :dev, runtime: false},
+      {:httpoison, "~> 1.6.1"},
+      {:excoveralls, "~> 0.11.2", only: :test},
+      {:credo, "~> 1.1.5", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.21.2", only: :dev, runtime: false},
       {:jason, "1.1.2"}
     ]
   end
