@@ -7,21 +7,25 @@ defmodule ExCwmanage.Api.HTTPClient do
 
   require Logger
 
-  @api_root Application.get_env(:ex_cwmanage, :cw_api_root)
-  @timeout Application.get_env(:ex_cwmanage, :http_timeout)
-  @recv_timeout Application.get_env(:ex_cwmanage, :http_recv_timeout)
+  defp api_root, do: Application.get_env(:ex_cwmanage, :cw_api_root)
+  defp timeout, do: Application.get_env(:ex_cwmanage, :http_timeout)
+  defp recv_timeout, do: Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
   def generate_upload_form(rec_id, rec_type, file_path) do
-    {:multipart, [{"RecordId", "#{rec_id}}"}, {"RecordType", rec_type},
-                  {:file, file_path, {"form-data", [{:filename, Path.basename(file_path)}]}, []}]}
+    {:multipart,
+     [
+       {"RecordId", "#{rec_id}}"},
+       {"RecordType", rec_type},
+       {:file, file_path, {"form-data", [{:filename, Path.basename(file_path)}]}, []}
+     ]}
   end
 
   def get_http_raw(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
+         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http) do
       Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, http.body}
@@ -34,9 +38,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def get_http(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
+         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -53,9 +57,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def get_http_page(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_pagination_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
+         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       case next_page(http.headers) do
@@ -77,9 +81,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def post_http(path, payload) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.post(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.post(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -96,9 +100,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def put_http(path, payload) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.put(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.put(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -115,9 +119,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def patch_http(path, payload) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path),
+         {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.patch(url, payload, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.patch(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -134,9 +138,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   def delete_http(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(@api_root, path, generate_parameters(params)),
+         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.delete(url, headers, timeout: @timeout, recv_timeout: @recv_timeout),
+           HTTPoison.delete(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -176,8 +180,10 @@ defmodule ExCwmanage.Api.HTTPClient do
     case http_response.status_code do
       200 ->
         {:ok, http_response}
+
       201 ->
         {:ok, http_response}
+
       _ ->
         {:error, http_response}
     end
@@ -216,9 +222,10 @@ defmodule ExCwmanage.Api.HTTPClient do
 
   defp next_page(headers) do
     link = List.keyfind(headers, "Link", 0)
-    Logger.debug fn ->
+
+    Logger.debug(fn ->
       "Checking for link in headers: #{inspect(headers)}"
-    end
+    end)
 
     case link do
       {"Link", url} ->
