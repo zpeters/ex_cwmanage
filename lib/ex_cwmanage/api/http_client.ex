@@ -200,7 +200,7 @@ defmodule ExCwmanage.Api.HTTPClient do
   defp generate_pagination_headers(token) do
     headers = [
       Authorization: "Basic #{token}",
-      Accept: "application/vnd.connectwise.com+json; version=3.0.0",
+      Accept: "application/vnd.connectwise.com+json",
       "Content-Type": "application/json",
       clientId: Application.get_env(:ex_cwmanage, :cw_clientid),
       "Pagination-Type": "forward-only"
@@ -212,7 +212,7 @@ defmodule ExCwmanage.Api.HTTPClient do
   def generate_headers(token) do
     headers = [
       Authorization: "Basic #{token}",
-      Accept: "application/vnd.connectwise.com+json; version=3.0.0",
+      Accept: "application/vnd.connectwise.com+json",
       "Content-Type": "application/json",
       clientId: Application.get_env(:ex_cwmanage, :cw_clientid)
     ]

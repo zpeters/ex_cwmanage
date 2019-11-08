@@ -70,7 +70,9 @@ Different resources in the api allow addition options to be passed along using n
 https://developer.connectwise.com/Products/Manage/Developer_Guide
 
 
-
+### Changes
+- version 0.3.0 - removed version tag in accept header that bumps us up to the latest version of the API. 
+The api *should* be backwards compatible but this is considered a breaking change.
 
 ## Installation
 
@@ -80,7 +82,7 @@ by adding `ex_cwmanage` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_cwmanage, "~> 0.2.0"}
+    {:ex_cwmanage, "~> 0.3.0"}
   ]
 end
 ```
