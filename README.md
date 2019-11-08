@@ -82,7 +82,7 @@ by adding `ex_cwmanage` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_cwmanage, "~> 0.2.0"}
+    {:ex_cwmanage, "~> 0.3.0"}
   ]
 end
 ```
