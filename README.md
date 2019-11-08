@@ -12,7 +12,7 @@ The following configuration information is required to connect to the ConnectWis
  - api-au.myconnectwise.net
  - api-eu.myconnectwise.net
  - api-na.myconnectwise.net
- - Example API root url `https://api-na.myconnectwise.net/v4_6_release/apis/3.0/`
+ - Example API root url `https://api-na.myconnectwise.net/v2019_5/apis/3.0/`.  As of 2019 the "release" tracks your connectwise version.  Please see the following documentation https://developer.connectwise.com/Best_Practices/Manage_Cloud_URL_Formatting?mt-learningpath=manage
 2. Company Id: When you log into connectwise this is your *Company Name*
 3. Public and Private Key:  (Follow this guide https://docs.connectwise.com/ConnectWise_Documentation/090/040/010/010/060)
 4. Create a "client id": https://developer.connectwise.com/ClientID 
