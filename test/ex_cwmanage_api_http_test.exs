@@ -4,6 +4,11 @@ defmodule ExCwmanageApiHttpTest do
 
   alias ExCwmanage.Api.HTTPClient, as: HTTPClient
 
+  describe "get_http_stream/1" do
+    {:ok, resp} = HTTPClient.get_http_stream("/get")
+    assert resp == :ok
+  end
+
   describe "get_http/1 and get_http/2 and get_http_raw variants" do
     test "http /get test" do
       {:ok, resp} = HTTPClient.get_http("/get")

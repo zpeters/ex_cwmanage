@@ -5,6 +5,8 @@ defmodule ExCwmanage.Api.HTTPClient do
   Handles generation of security token and and all http communication
   """
 
+  alias ExCwmanage.Api.HTTPClient.Stream
+
   require Logger
 
   defp api_root, do: Application.get_env(:ex_cwmanage, :cw_api_root)
@@ -33,6 +35,15 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  end
+
+  def get_http_stream(path, params \\ []) do
+    results =
+      {path, params}
+      |> Stream.new()
+      |> Enum.map(& &1)
+      |> List.flatten()
+    {:ok, results}
   end
 
   def get_http(path, params \\ []) do

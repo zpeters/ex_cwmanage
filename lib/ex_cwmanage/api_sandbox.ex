@@ -8,12 +8,71 @@ defmodule ExCwmanage.Api.Sandbox do
     get_http(path, params)
   end
 
+  def get_stream(path, params) do
+    get_http_stream(path, params)
+  end
+
+
   def get_page(path, params) do
     get_http_page(path, params)
   end
 
   def get_raw(path, params) do
     get_http_raw(path, params)
+  end
+
+  def get_http_stream("/system/members", fields: "id") do
+    {:ok,
+    [
+      %{"id" => 149},
+      %{"id" => 150},
+      %{"id" => 151},
+      %{"id" => 152},
+      %{"id" => 153},
+      %{"id" => 154},
+      %{"id" => 155},
+      %{"id" => 156},
+      %{"id" => 157},
+      %{"id" => 158},
+      %{"id" => 159},
+      %{"id" => 160},
+      %{"id" => 161},
+      %{"id" => 162},
+      %{"id" => 163},
+      %{"id" => 164},
+      %{"id" => 165},
+      %{"id" => 166},
+      %{"id" => 167},
+      %{"id" => 168},
+      %{"id" => 169},
+      %{"id" => 170},
+      %{"id" => 171},
+      %{"id" => 172},
+      %{"id" => 173},
+      %{"id" => 174},
+      %{"id" => 175},
+      %{"id" => 176},
+      %{"id" => 177},
+      %{"id" => 178},
+      %{"id" => 179},
+      %{"id" => 180},
+      %{"id" => 181},
+      %{"id" => 182},
+      %{"id" => 183},
+      %{"id" => 184},
+      %{"id" => 185},
+      %{"id" => 186},
+      %{"id" => 187},
+      %{"id" => 188},
+      %{"id" => 189},
+      %{"id" => 190},
+      %{"id" => 191},
+      %{"id" => 192},
+      %{"id" => 193},
+      %{"id" => 194},
+      %{"id" => 195}
+    ]}
+
   end
 
   def get_http("/service/locations", conditions: "id=1") do

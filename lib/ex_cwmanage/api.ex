@@ -18,6 +18,11 @@ defmodule ExCwmanage.Api do
     connectwise_api().get_http(path, params)
   end
 
+  @callback get_stream(path :: path, params :: list()) :: map
+  def get_stream(path, params \\[]) do
+    connectwise_api().get_http_stream(path,params)
+  end
+
   @callback get_page(path :: path, params :: list()) :: map
   @doc """
   Example
