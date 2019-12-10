@@ -5,6 +5,8 @@ defmodule ExCwmanage.Api.HTTPClient.Stream do
 
   require Logger
 
+  defp api_client, do: ExCwmanage.Api.HTTPClient
+
   @doc """
   resource = {`path`, `params`}
 
@@ -26,7 +28,7 @@ defmodule ExCwmanage.Api.HTTPClient.Stream do
   defp fetch(resource, pageid) do
     {path, params} = resource
     new_params = params ++ [pageid: pageid]
-    {:ok, nextpage, results} = ExCwmanage.Api.get_page(path, new_params)
+    {:ok, nextpage, results} = api_client().get_page(path, new_params)
 
     {results, nextpage, resource}
   end

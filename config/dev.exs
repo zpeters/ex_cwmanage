@@ -1,5 +1,10 @@
 use Mix.Config
 
+config :logger,
+  level: :info
+
+config :ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient
+
 # if secret exists use that, otherwise
 # use env variables
 if File.exists?("config/dev.secret.exs") do
@@ -11,6 +16,3 @@ else
     cw_publickey: System.get_env("CW_PUBLICKEY"),
     cw_privatekey: System.get_env("CW_PRIVATEKEY")
 end
-
-## Apis
-config :ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient
