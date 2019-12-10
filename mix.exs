@@ -49,11 +49,12 @@ defmodule ExCwmanage.MixProject do
 
   defp deps do
     [
-      {:httpoison, "~> 1.6.0"},
-      {:excoveralls, "~> 0.12.0", only: :test},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21.0", only: :dev, runtime: false},
-      {:jason, "~> 1.1.0"}
+      {:excoveralls, "~> 0.12.0", only: :test},
+      {:httpoison, "~> 1.6.0"},
+      {:jason, "~> 1.1.0"},
+      {:mox, "~> 0.5.0", only: :test}
     ]
   end
 end

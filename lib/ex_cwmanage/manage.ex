@@ -9,11 +9,11 @@ defmodule ExCwmanage.Manage.Contacts do
   Some shortcuts for Contacts
   """
 
-  import ExCwmanage.Api
+  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api)
 
   def get_contacts_for_company(companyid) do
     {:ok, contacts} =
-      get(
+      api_client().get(
         '/company/contacts?conditions=company/identifier="#{companyid}"&fields=id,firstName,lastName,email'
       )
 
@@ -22,7 +22,7 @@ defmodule ExCwmanage.Manage.Contacts do
   end
 
   defp get_email_for_contact(contactid) do
-    {:ok, comms} = get('/company/contacts/#{contactid}/communications')
+    {:ok, comms} = api_client().get('/company/contacts/#{contactid}/communications')
 
     comms
     |> Enum.filter(&(Map.get(&1, "communicationType") == "Email"))
@@ -34,26 +34,25 @@ defmodule ExCwmanage.Manage.System do
   @moduledoc """
   Some shortcuts for System
   """
-
-  import ExCwmanage.Api
+  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api)
 
   def info do
-    {:ok, resp} = get("/system/info")
+    {:ok, resp} = api_client().get("/system/info")
     resp
   end
 
   def departments do
-    {:ok, resp} = get("/system/departments")
+    {:ok, resp} = api_client().get("/system/departments")
     resp
   end
 
   def others do
-    {:ok, resp} = get("/system/mycompany/other")
+    {:ok, resp} = api_client().get("/system/mycompany/other")
     resp
   end
 
   def services do
-    {:ok, resp} = get("/system/mycompany/services")
+    {:ok, resp} = api_client().get("/system/mycompany/services")
     resp
   end
 end
