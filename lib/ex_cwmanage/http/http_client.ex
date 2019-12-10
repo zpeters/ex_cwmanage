@@ -4,6 +4,9 @@ defmodule ExCwmanage.Api.HTTPClient do
 
   Handles generation of security token and and all http communication
   """
+  @behaviour ExCwmanage.Api.Behaviour
+
+  alias ExCwmanage.Api.HTTPClient.Stream
 
   require Logger
 
@@ -11,31 +14,8 @@ defmodule ExCwmanage.Api.HTTPClient do
   defp timeout, do: Application.get_env(:ex_cwmanage, :http_timeout)
   defp recv_timeout, do: Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
-  def generate_upload_form(rec_id, rec_type, file_path) do
-    {:multipart,
-     [
-       {"RecordId", "#{rec_id}}"},
-       {"RecordType", rec_type},
-       {:file, file_path, {"form-data", [{:filename, Path.basename(file_path)}]}, []}
-     ]}
-  end
-
-  def get_http_raw(path, params \\ []) do
-    with {:ok, token} <- generate_token(),
-         {:ok, headers} <- generate_headers(token),
-         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
-         {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
-         {:ok, _} <- status_check(http) do
-      Logger.debug(fn -> "#{inspect(http)}" end)
-      {:ok, http.body}
-    else
-      err ->
-        err
-    end
-  end
-
-  def get_http(path, params \\ []) do
+  @impl ExCwmanage.Api.Behaviour
+  def get(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
@@ -54,7 +34,44 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def get_http_page(path, params \\ []) do
+  def generate_upload_form(rec_id, rec_type, file_path) do
+    {:multipart,
+     [
+       {"RecordId", "#{rec_id}}"},
+       {"RecordType", rec_type},
+       {:file, file_path, {"form-data", [{:filename, Path.basename(file_path)}]}, []}
+     ]}
+  end
+
+  @impl ExCwmanage.Api.Behaviour
+  def get_raw(path, params \\ []) do
+    with {:ok, token} <- generate_token(),
+         {:ok, headers} <- generate_headers(token),
+         {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
+         {:ok, http} <-
+           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+         {:ok, _} <- status_check(http) do
+      Logger.debug(fn -> "#{inspect(http)}" end)
+      {:ok, http.body}
+    else
+      err ->
+        err
+    end
+  end
+
+  @impl ExCwmanage.Api.Behaviour
+  def get_stream(path, params \\ []) do
+    results =
+      {path, params}
+      |> Stream.new()
+      |> Enum.map(& &1)
+      |> List.flatten()
+
+    {:ok, results}
+  end
+
+  @impl ExCwmanage.Api.Behaviour
+  def get_page(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_pagination_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
@@ -78,7 +95,8 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def post_http(path, payload) do
+  @impl ExCwmanage.Api.Behaviour
+  def post(path, payload \\ %{}) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
@@ -97,7 +115,8 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def put_http(path, payload) do
+  @impl ExCwmanage.Api.Behaviour
+  def put(path, payload \\ %{}) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
@@ -116,7 +135,8 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def patch_http(path, payload) do
+  @impl ExCwmanage.Api.Behaviour
+  def patch(path, payload \\ %{}) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
@@ -135,7 +155,8 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   end
 
-  def delete_http(path, params \\ []) do
+  @impl ExCwmanage.Api.Behaviour
+  def delete(path, params \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),

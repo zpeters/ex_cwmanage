@@ -1,51 +1,69 @@
-defmodule ExCwmanage.Api do
+defmodule ExCwmanage.Api.Behaviour do
   @moduledoc """
   Raw API commands
   """
 
-  @type path :: String.t()
+  @callback get(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback get(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
 
-  defp connectwise_api,
-    do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
+  @callback get_stream(path :: String.t()) :: {:ok, [map]}
+  @callback get_stream(path :: String.t(), params :: list()) :: {:ok, [map]}
 
-  @callback get_raw(path :: path, params :: list()) :: binary()
-  def get_raw(path, params \\ []) do
-    connectwise_api().get_http_raw(path, params)
-  end
+  @callback get_page(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback get_page(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
 
-  @callback get(path :: path, params :: list()) :: map
-  def get(path, params \\ []) do
-    connectwise_api().get_http(path, params)
-  end
+  @callback get_raw(path :: String.t()) :: {:ok, binary()} | {:error, term()}
+  @callback get_raw(path :: String.t(), params :: list()) :: {:ok, binary()} | {:error, term()}
 
-  @callback get_page(path :: path, params :: list()) :: map
-  @doc """
-  Example
-  Initial call `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies")`
-  Next page `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies", [pageid: next])`
-  Next page (custom page size) `{:ok, next, c} = ExCwmanage.Api.get_page("/company/companies", [pageid: next], [pagesize: 10])`
+  @callback post(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback post(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
+
+  @callback put(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback put(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
+
+  @callback patch(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback patch(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
+
+  @callback delete(path :: String.t()) :: {:ok, map} | {:error, term()}
+  @callback delete(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
+end
+
+defmodule ExCwmanage.Api do
+  @moduledoc """
+  API for Excwmanage, this forwards requests to the designated API client (normally HTTP)
   """
-  def get_page(path, params \\ []) do
-    connectwise_api().get_http_page(path, params)
-  end
+  @behaviour ExCwmanage.Api.Behaviour
+  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api)
 
-  @callback post(path :: path, payload :: String.t()) :: map
-  def post(path, payload) do
-    connectwise_api().post_http(path, payload)
-  end
-
-  @callback put(path :: path, payload :: String.t()) :: map
-  def put(path, payload) do
-    connectwise_api().put_http(path, payload)
-  end
-
-  @callback patch(path :: path, payload :: String.t()) :: map
-  def patch(path, payload) do
-    connectwise_api().patch_http(path, payload)
-  end
-
-  @callback delete(path :: path, params :: list()) :: map
   def delete(path, params \\ []) do
-    connectwise_api().delete_http(path, params)
+    api_client().delete(path, params)
+  end
+
+  def get(path, params \\ []) do
+    api_client().get(path, params)
+  end
+
+  def get_page(path, params \\ []) do
+    api_client().get_page(path, params)
+  end
+
+  def get_raw(path, params \\ []) do
+    api_client().get_raw(path, params)
+  end
+
+  def get_stream(path, params \\ []) do
+    api_client().get_stream(path, params)
+  end
+
+  def patch(path, payload \\ %{}) do
+    api_client().patch(path, payload)
+  end
+
+  def put(path, payload \\ %{}) do
+    api_client().put(path, payload)
+  end
+
+  def post(path, payload \\ %{}) do
+    api_client().post(path, payload)
   end
 end
