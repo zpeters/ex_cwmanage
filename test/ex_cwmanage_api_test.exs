@@ -172,7 +172,6 @@ defmodule ExCwmanageApiTest do
              clientId: "73772398-7364-4a94-9689-c3e95d294a43"
            ],
            method: :get,
-           options: [timeout: 12_000, recv_timeout: 12_000],
            params: %{},
            url: "https://api-na.myconnectwise.net/v2019_5/apis/3.0/badpath"
          },

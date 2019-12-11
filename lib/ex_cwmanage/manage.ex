@@ -9,7 +9,8 @@ defmodule ExCwmanage.Manage.Contacts do
   Some shortcuts for Contacts
   """
 
-  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
+  defp api_client,
+    do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
   def get_contacts_for_company(companyid) do
     {:ok, contacts} =
@@ -34,7 +35,8 @@ defmodule ExCwmanage.Manage.System do
   @moduledoc """
   Some shortcuts for System
   """
-  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
+  defp api_client,
+    do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
   def info do
     {:ok, resp} = api_client().get("/system/info")
