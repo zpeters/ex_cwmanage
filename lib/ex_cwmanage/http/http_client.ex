@@ -32,6 +32,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   def generate_upload_form(rec_id, rec_type, file_path) do
@@ -57,6 +60,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -68,6 +74,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       |> List.flatten()
 
     {:ok, results}
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -93,6 +102,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -113,6 +125,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -133,6 +148,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -153,6 +171,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   @impl ExCwmanage.Api.Behaviour
@@ -173,6 +194,9 @@ defmodule ExCwmanage.Api.HTTPClient do
       err ->
         err
     end
+  rescue
+    exception ->
+      {:error, :excwmanage_get_exception, exception}
   end
 
   def generate_url(api_root, path, conditions \\ []) do
