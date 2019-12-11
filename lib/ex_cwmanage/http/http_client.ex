@@ -11,8 +11,6 @@ defmodule ExCwmanage.Api.HTTPClient do
   require Logger
 
   defp api_root, do: Application.get_env(:ex_cwmanage, :cw_api_root)
-  defp timeout, do: Application.get_env(:ex_cwmanage, :http_timeout)
-  defp recv_timeout, do: Application.get_env(:ex_cwmanage, :http_recv_timeout)
 
   @impl ExCwmanage.Api.Behaviour
   def get(path, params \\ []) do
@@ -20,7 +18,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.get(url, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -49,7 +47,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.get(url, headers),
          {:ok, _} <- status_check(http) do
       Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, http.body}
@@ -76,7 +74,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_pagination_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.get(url, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       case next_page(http.headers) do
@@ -101,7 +99,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.post(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.post(url, payload, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -121,7 +119,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.put(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.put(url, payload, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -141,7 +139,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.patch(url, payload, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.patch(url, payload, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -161,7 +159,7 @@ defmodule ExCwmanage.Api.HTTPClient do
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.delete(url, headers, timeout: timeout(), recv_timeout: recv_timeout()),
+           HTTPoison.delete(url, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)

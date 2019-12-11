@@ -33,7 +33,8 @@ defmodule ExCwmanage.Api do
   API for Excwmanage, this forwards requests to the designated API client (defaults to HTTP)
   """
   @behaviour ExCwmanage.Api.Behaviour
-  defp api_client, do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
+  defp api_client,
+    do: Application.get_env(:ex_cwmanage, :connectwise_api, ExCwmanage.Api.HTTPClient)
 
   def delete(path, params \\ []) do
     api_client().delete(path, params)
