@@ -32,7 +32,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     end
   rescue
     exception ->
-      {:error, :exception}
+      {:error, exception}
   end
 
   def generate_upload_form(rec_id, rec_type, file_path) do
