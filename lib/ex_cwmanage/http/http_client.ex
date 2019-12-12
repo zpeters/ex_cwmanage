@@ -86,7 +86,7 @@ defmodule ExCwmanage.Api.HTTPClient do
            HTTPoison.get(url, headers),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
-      case next_page(http.headers) do
+      case next_page(params[:pageid], http.headers) do
         nil ->
           {:ok, nil, resp}
 
@@ -263,7 +263,7 @@ defmodule ExCwmanage.Api.HTTPClient do
     {:ok, headers}
   end
 
-  defp next_page(headers) do
+  defp next_page(current_pageid, headers) do
     link = List.keyfind(headers, "Link", 0)
 
     Logger.debug(fn ->
@@ -271,12 +271,26 @@ defmodule ExCwmanage.Api.HTTPClient do
     end)
 
     case link do
+      {"Link", ""} ->
+        nil
+
       {"Link", url} ->
-        url
-        |> String.split("pageId=")
-        |> List.last()
-        |> String.split(">;")
-        |> List.first()
+        next_pageid =
+          url
+          |> String.split("pageId=")
+          |> List.last()
+          |> String.split(">;")
+          |> List.first()
+
+        # FIXME: there is a bug in the connectwise api where some endpoints
+        # will return their current pageid as the next pageid instead of  no link
+        # this is a work around
+        if next_pageid == current_pageid do
+          Logger.debug("Detected nextpage == current page, returning nil")
+          nil
+        else
+          next_pageid
+        end
 
       _ ->
         nil
