@@ -10,7 +10,7 @@ defmodule ExCwmanageApiTest do
   describe "get_stream/1 and get_stream/2" do
     test "get a stream" do
       @mock
-      |> expect(:get_stream, fn _path, _params ->
+      |> expect(:get_stream, fn _path, _params, _http_opts ->
         {:ok,
          [
            %{"id" => 149},
@@ -72,7 +72,7 @@ defmodule ExCwmanageApiTest do
 
   test "test get page default" do
     @mock
-    |> expect(:get_page, fn _path, _param ->
+    |> expect(:get_page, fn _path, _params, _http_opts ->
       {:ok, 10, [%{:name => :company1}, %{:name => :compan2}, %{:name => :company3}]}
     end)
 
@@ -84,7 +84,7 @@ defmodule ExCwmanageApiTest do
 
   test "test get raw page (no json)" do
     @mock
-    |> expect(:get_raw, fn _path, _params ->
+    |> expect(:get_raw, fn _path, _params, _http_opts ->
       {:ok,
        "{\"version\":\"v2019.5.68761\",\"isCloud\":true,\"serverTimeZone\":\"Eastern Standard Time\",\"licenseBits\":[{\"name\":\"PocketPC\",\"activeFlag\":true},{\"name\":\"EmailConnector\",\"activeFlag\":true},{\"name\":\"ADPInterface\",\"activeFlag\":false},{\"name\":\"GLInterface\",\"activeFlag\":true},{\"name\":\"PremiumPortal\",\"activeFlag\":true},{\"name\":\"ManagedServices\",\"activeFlag\":true},{\"name\":\"SpamStats\",\"activeFlag\":false},{\"name\":\"AuditTrail\",\"activeFlag\":true},{\"name\":\"QuoteWerks\",\"activeFlag\":false},{\"name\":\"ConnectWiseNetwork\",\"activeFlag\":true},{\"name\":\"Inventory\",\"activeFlag\":true},{\"name\":\"Purchasing\",\"activeFlag\":true},{\"name\":\"IzendaReports\",\"activeFlag\":true},{\"name\":\"SalesManagement\",\"activeFlag\":true},{\"name\":\"KnowledgeBase\",\"activeFlag\":true},{\"name\":\"Agreement\",\"activeFlag\":true},{\"name\":\"AgileBoard\",\"activeFlag\":true},{\"name\":\"Marketing\",\"activeFlag\":true},{\"name\":\"StreamlineIT\",\"activeFlag\":true},{\"name\":\"Subcontractor\",\"activeFlag\":true},{\"name\":\"CustomFields\",\"activeFlag\":true},{\"name\":\"ManageLogin\",\"activeFlag\":true},{\"name\":\"SessionLockout\",\"activeFlag\":true},{\"name\":\"MobileSessionLockout\",\"activeFlag\":true}],\"cloudRegion\":\"NA\"}"}
     end)
@@ -95,7 +95,7 @@ defmodule ExCwmanageApiTest do
 
   test "test get no conditions" do
     @mock
-    |> expect(:get, fn _path, _params ->
+    |> expect(:get, fn _path, _params, _http_opts ->
       {:ok,
        %{
          "cloudRegion" => "NA",
@@ -138,7 +138,7 @@ defmodule ExCwmanageApiTest do
 
   test "test bad path" do
     @mock
-    |> expect(:get, fn _path, _params ->
+    |> expect(:get, fn _path, _params, _http_opts ->
       {:error,
        %HTTPoison.Response{
          body:
@@ -186,7 +186,7 @@ defmodule ExCwmanageApiTest do
 
   test "get with conditions" do
     @mock
-    |> expect(:get, fn _path, _params ->
+    |> expect(:get, fn _path, _params, _http_opts ->
       {:ok,
        [
          %{
@@ -255,7 +255,7 @@ defmodule ExCwmanageApiTest do
     {:ok, resp} = ExCwmanage.Api.get("/service/locations")
 
     @mock
-    |> expect(:get, fn _path, _params ->
+    |> expect(:get, fn _path, _params, _http_opts ->
       {:ok,
        [
          %{
@@ -279,7 +279,7 @@ defmodule ExCwmanageApiTest do
 
   test "post function returns placeholder :ok" do
     @mock
-    |> expect(:post, fn _path, _payload ->
+    |> expect(:post, fn _path, _payload, _http_opts ->
       {:ok, %{}}
     end)
 
@@ -289,7 +289,7 @@ defmodule ExCwmanageApiTest do
 
   test "patch function returns placeholder :ok" do
     @mock
-    |> expect(:patch, fn _path, _payload ->
+    |> expect(:patch, fn _path, _payload, _http_opts ->
       {:ok, %{}}
     end)
 
@@ -299,7 +299,7 @@ defmodule ExCwmanageApiTest do
 
   test "put function returns placeholder :ok" do
     @mock
-    |> expect(:put, fn _path, _payload ->
+    |> expect(:put, fn _path, _payload, _http_opts ->
       {:ok, %{}}
     end)
 
@@ -309,7 +309,7 @@ defmodule ExCwmanageApiTest do
 
   test "delete function returns placeholder :ok" do
     @mock
-    |> expect(:delete, fn _path, _params ->
+    |> expect(:delete, fn _path, _params, _http_opts ->
       {:ok, %{}}
     end)
 

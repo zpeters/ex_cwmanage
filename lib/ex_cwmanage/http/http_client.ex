@@ -13,12 +13,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   defp api_root, do: Application.get_env(:ex_cwmanage, :cw_api_root)
 
   @impl ExCwmanage.Api.Behaviour
-  def get(path, params \\ []) do
+  def get(path, params \\ [], http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers),
+           HTTPoison.get(url, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -45,12 +45,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def get_raw(path, params \\ []) do
+  def get_raw(path, params \\ [], http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers),
+           HTTPoison.get(url, headers, http_opts),
          {:ok, _} <- status_check(http) do
       Logger.debug(fn -> "#{inspect(http)}" end)
       {:ok, http.body}
@@ -64,9 +64,9 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def get_stream(path, params \\ []) do
+  def get_stream(path, params \\ [], http_opts \\ []) do
     results =
-      {path, params}
+      {path, params, http_opts}
       |> Stream.new()
       |> Enum.map(& &1)
       |> List.flatten()
@@ -78,12 +78,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def get_page(path, params \\ []) do
+  def get_page(path, params \\ [], http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_pagination_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.get(url, headers),
+           HTTPoison.get(url, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       case next_page(params[:pageid], http.headers) do
@@ -106,12 +106,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def post(path, payload \\ %{}) do
+  def post(path, payload \\ %{}, http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.post(url, payload, headers),
+           HTTPoison.post(url, payload, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -129,12 +129,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def put(path, payload \\ %{}) do
+  def put(path, payload \\ %{}, http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.put(url, payload, headers),
+           HTTPoison.put(url, payload, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -152,12 +152,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def patch(path, payload \\ %{}) do
+  def patch(path, payload \\ %{}, http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path),
          {:ok, http} <-
-           HTTPoison.patch(url, payload, headers),
+           HTTPoison.patch(url, payload, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)
@@ -175,12 +175,12 @@ defmodule ExCwmanage.Api.HTTPClient do
   end
 
   @impl ExCwmanage.Api.Behaviour
-  def delete(path, params \\ []) do
+  def delete(path, params \\ [], http_opts \\ []) do
     with {:ok, token} <- generate_token(),
          {:ok, headers} <- generate_headers(token),
          {:ok, url} <- generate_url(api_root(), path, generate_parameters(params)),
          {:ok, http} <-
-           HTTPoison.delete(url, headers),
+           HTTPoison.delete(url, headers, http_opts),
          {:ok, _} <- status_check(http),
          {:ok, resp} <- Jason.decode(http.body) do
       Logger.debug(fn -> "#{inspect(http)}" end)

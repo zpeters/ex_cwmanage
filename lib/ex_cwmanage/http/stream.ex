@@ -26,9 +26,9 @@ defmodule ExCwmanage.Api.HTTPClient.Stream do
   end
 
   defp fetch(resource, pageid) do
-    {path, params} = resource
+    {path, params, http_opts} = resource
     new_params = params ++ [pageid: pageid]
-    {:ok, nextpage, results} = api_client().get_page(path, new_params)
+    {:ok, nextpage, results} = api_client().get_page(path, new_params, http_opts)
 
     {results, nextpage, resource}
   end
