@@ -5,7 +5,8 @@ defmodule ExCwmanage.Api.Behaviour do
 
   @callback get(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback get(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
-  @callback get(path :: String.t(), params :: list(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback get(path :: String.t(), params :: list(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 
   @callback get_stream(path :: String.t()) :: {:ok, [map]}
   @callback get_stream(path :: String.t(), params :: list()) :: {:ok, [map]}
@@ -13,27 +14,33 @@ defmodule ExCwmanage.Api.Behaviour do
 
   @callback get_page(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback get_page(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
-  @callback get_page(path :: String.t(), params :: list(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback get_page(path :: String.t(), params :: list(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 
   @callback get_raw(path :: String.t()) :: {:ok, binary()} | {:error, term()}
   @callback get_raw(path :: String.t(), params :: list()) :: {:ok, binary()} | {:error, term()}
-  @callback get_raw(path :: String.t(), params :: list(), http_opts :: list()) :: {:ok, binary()} | {:error, term()}
+  @callback get_raw(path :: String.t(), params :: list(), http_opts :: list()) ::
+              {:ok, binary()} | {:error, term()}
 
   @callback post(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback post(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
-  @callback post(path :: String.t(), payload :: String.t(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback post(path :: String.t(), payload :: String.t(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 
   @callback put(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback put(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
-  @callback put(path :: String.t(), payload :: String.t(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback put(path :: String.t(), payload :: String.t(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 
   @callback patch(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback patch(path :: String.t(), payload :: String.t()) :: {:ok, map} | {:error, term()}
-  @callback patch(path :: String.t(), payload :: String.t(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback patch(path :: String.t(), payload :: String.t(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 
   @callback delete(path :: String.t()) :: {:ok, map} | {:error, term()}
   @callback delete(path :: String.t(), params :: list()) :: {:ok, map} | {:error, term()}
-  @callback delete(path :: String.t(), params :: list(), http_opts :: list()) :: {:ok, map} | {:error, term()}
+  @callback delete(path :: String.t(), params :: list(), http_opts :: list()) ::
+              {:ok, map} | {:error, term()}
 end
 
 defmodule ExCwmanage.Api do
