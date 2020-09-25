@@ -54,7 +54,7 @@ defmodule ExCwmanage.MixProject do
       {:excoveralls, "~> 0.13.0", only: :test},
       {:httpoison, "~> 1.7.0"},
       {:jason, "~> 1.2.0"},
-      {:mox, "~> 0.5.0", only: :test}
+      {:mox, "~> 1.0.0", only: :test}
     ]
   end
 end
