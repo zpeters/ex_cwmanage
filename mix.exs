@@ -52,7 +52,7 @@ defmodule ExCwmanage.MixProject do
       {:credo, "~> 1.5.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.23.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.13.0", only: :test},
-      {:httpoison, "~> 1.7.0"},
+      {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.2.0"},
       {:mox, "~> 1.0.0", only: :test}
     ]
