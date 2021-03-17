@@ -50,7 +50,7 @@ defmodule ExCwmanage.MixProject do
   defp deps do
     [
       {:credo, "~> 1.5.1", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.23.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.24.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14.0", only: :test},
       {:httpoison, "~> 1.8.0"},
       {:jason, "~> 1.2.0"},
